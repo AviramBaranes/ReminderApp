@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './config.env' });
 
 import express from 'express';
-// import cors from 'cors';
 import connectDb from './utils/database';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
@@ -20,7 +19,6 @@ const io = new Server(httpServer,{
     }
 })
 
-// app.use(cors({origin: clientOrigin}))
 const PORT = process.env.PORT || 8080;
 
 connectDb().then(_=>{  

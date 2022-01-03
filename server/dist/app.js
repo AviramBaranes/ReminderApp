@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: './config.env' });
 const express_1 = __importDefault(require("express"));
-// import cors from 'cors';
 const database_1 = __importDefault(require("./utils/database"));
 const socket_io_1 = require("socket.io");
 const http_1 = require("http");
@@ -20,7 +19,6 @@ const io = new socket_io_1.Server(httpServer, {
         credentials: true,
     }
 });
-// app.use(cors({origin: clientOrigin}))
 const PORT = process.env.PORT || 8080;
 (0, database_1.default)().then(_ => {
     httpServer.listen(PORT, () => {
