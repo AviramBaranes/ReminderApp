@@ -12,18 +12,18 @@ const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = express();
 const httpServer = createServer(app);
 
-const io = new Server(httpServer,{
-    cors:{
-        origin:clientOrigin,
-        credentials:true,
-    }
-})
+const io = new Server(httpServer, {
+  cors: {
+    origin: clientOrigin,
+    credentials: true,
+  },
+});
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8082;
 
-connectDb().then(_=>{  
-    httpServer.listen(PORT, ()=>{
-        console.log(`Reminder App is listening on port ${PORT}`)  
-        socket(io)
-    })
-})
+connectDb().then((_) => {
+  httpServer.listen(PORT, () => {
+    console.log(`Reminder App is listening on port ${PORT}`);
+    socket(io);
+  });
+});

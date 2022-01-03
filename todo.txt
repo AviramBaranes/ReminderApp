@@ -1,0 +1,7 @@
+1) adding timer page
+2) get all timers in backend
+3) get all timers page
+4) emit finished timers 
+5) styles
+6) animations
+7) deployment

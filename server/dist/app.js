@@ -17,10 +17,10 @@ const io = new socket_io_1.Server(httpServer, {
     cors: {
         origin: clientOrigin,
         credentials: true,
-    }
+    },
 });
-const PORT = process.env.PORT || 8080;
-(0, database_1.default)().then(_ => {
+const PORT = process.env.PORT || 8082;
+(0, database_1.default)().then((_) => {
     httpServer.listen(PORT, () => {
         console.log(`Reminder App is listening on port ${PORT}`);
         (0, socket_1.default)(io);
