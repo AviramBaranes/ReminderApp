@@ -34,6 +34,7 @@ export const checkReminder = (
       name: reminder.name,
       done: true,
     });
+    deleteReminder(reminder._id!, reminders);
   } else {
     setTimeout(() => {
       console.log('done');
@@ -42,9 +43,9 @@ export const checkReminder = (
         name: reminder.name,
         done: false,
       });
+      deleteReminder(reminder._id!, reminders);
     }, timeOut - 10000);
   }
-  deleteReminder(reminder._id!, reminders);
 };
 
 async function deleteReminder(

@@ -22,6 +22,7 @@ const checkReminder = (reminder, io, socketId, reminders) => {
             name: reminder.name,
             done: true,
         });
+        deleteReminder(reminder._id, reminders);
     }
     else {
         setTimeout(() => {
@@ -30,9 +31,9 @@ const checkReminder = (reminder, io, socketId, reminders) => {
                 name: reminder.name,
                 done: false,
             });
+            deleteReminder(reminder._id, reminders);
         }, timeOut - 10000);
     }
-    deleteReminder(reminder._id, reminders);
 };
 exports.checkReminder = checkReminder;
 async function deleteReminder(reminderId, remindersModel) {

@@ -1,6 +1,8 @@
-1) get all timers in backend
+1) get all timers page
 
-2) get all timers page
+1.5) handle timer done
+
+2) handle errors
 
 3) refactor
 
