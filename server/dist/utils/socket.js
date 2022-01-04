@@ -24,50 +24,58 @@ function socket(io) {
     io.on(EVENTS.connection, async (socket) => {
         console.log('Socket connected');
         socket.on(EVENTS.CLIENT.NEW_TIMER, async ({ userId, name, time, date, description }) => {
-            let userReminders;
-            if (!userId) {
-                userReminders = await (0, createUser_1.createUser)();
-                io.to(socket.id).emit(EVENTS.SERVER.USER_CREATED, {
-                    userId: userReminders._id,
-                });
-            }
-            else {
-                userReminders = (await Reminders_1.default.findById(userId));
-                if (!userReminders) {
+            try {
+                let userReminders;
+                if (!userId) {
+                    userReminders = await (0, createUser_1.createUser)();
+                    io.to(socket.id).emit(EVENTS.SERVER.USER_CREATED, {
+                        userId: userReminders._id,
+                    });
+                }
+                else {
+                    userReminders = (await Reminders_1.default.findById(userId));
+                    if (!userReminders) {
+                        io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
+                            message: "Couldn't find any reminders",
+                        });
+                        return;
+                    }
+                }
+                if (name.length < 2) {
                     io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-                        message: "Couldn't find any reminders",
+                        message: "Reminder's name is too short",
                     });
                     return;
                 }
+                if (name.length > 15) {
+                    io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
+                        message: "Reminder's name is too long",
+                    });
+                    return;
+                }
+                if (time > 86400) {
+                    io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
+                        message: 'Timer is too long',
+                    });
+                    return;
+                }
+                const newReminder = {
+                    name,
+                    time,
+                    dateStarted: new Date(date),
+                };
+                if (description)
+                    newReminder.description = description;
+                userReminders.reminders.push(newReminder);
+                await userReminders.save();
+                io.to(socket.id).emit(EVENTS.SERVER.NEW_TIMER);
             }
-            if (name.length < 2) {
+            catch (err) {
+                console.log(err);
                 io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-                    message: "Reminder's name is too short",
+                    message: 'something went wrong :(',
                 });
-                return;
             }
-            if (name.length > 15) {
-                io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-                    message: "Reminder's name is too long",
-                });
-                return;
-            }
-            if (time > 86400) {
-                io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-                    message: 'Timer is too long',
-                });
-                return;
-            }
-            const newReminder = {
-                name,
-                time,
-                dateStarted: new Date(date),
-            };
-            if (description)
-                newReminder.description = description;
-            userReminders.reminders.push(newReminder);
-            await userReminders.save();
-            io.to(socket.id).emit(EVENTS.SERVER.NEW_TIMER);
         });
     });
 }
