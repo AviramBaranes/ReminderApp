@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { EVENTS } from '../../EVENTS/events';
 import { RootState } from '../../redux/store/store';
-import LoadingClock from '../UI/LoadingClock';
-import NoTimers from '../UI/NoTimers';
+import LoadingClock from '../UI/Loading/LoadingClock';
+import NoTimers from '../UI/TextComponents/NoTimers';
 
 interface calculatedReminder {
   name: string;
@@ -34,7 +34,7 @@ const TimersList: React.FC = () => {
 
   return (
     <>
-      {!userId && <NoTimers />}
+      {(!userId || !remindersList?.length) && <NoTimers />}
       {remindersList && userId ? (
         <ul>
           {remindersList.map((reminder) => (

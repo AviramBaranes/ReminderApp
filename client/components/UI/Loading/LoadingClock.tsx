@@ -1,4 +1,4 @@
-import classes from '../../styles/UI/LoadingClock.module.scss';
+import classes from '../../../styles/UI/LoadingClock.module.scss';
 
 const LoadingClock: React.FC = () => <div className={classes.clock}></div>;
 

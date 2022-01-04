@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { EVENTS } from '../../EVENTS/events';
 import { RootState } from '../../redux/store/store';
@@ -10,20 +10,23 @@ interface Time {
   seconds: string;
 }
 
-const TimerForm: React.FC = () => {
+const TimerForm: React.FC<{
+  setShowInfoModal: React.Dispatch<SetStateAction<boolean>>;
+}> = ({ setShowInfoModal }) => {
   const { socket, userId } = useSelector(
     (state: RootState) => state.socketSlice
   );
 
   const [error, setError] = useState('');
   const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [time, setTime] = useState<Time>({
     hours: '',
     minutes: '',
     seconds: '',
   });
+
   const { hours, minutes, seconds } = time;
-  const [description, setDescription] = useState('');
 
   function timeInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { value, name } = e.target;
@@ -76,7 +79,12 @@ const TimerForm: React.FC = () => {
     if (description) payload.description = description;
     if (userId) payload.userId = userId;
 
-    socket.emit(EVENTS.SERVER.NEW_TIMER, payload);
+    socket.emit(EVENTS.CLIENT.NEW_TIMER, payload);
+    socket.on(EVENTS.SERVER.TIMER_CREATED, () => {
+      setShowInfoModal(true);
+
+      setTimeout(() => setShowInfoModal(false), 3000);
+    });
   }
 
   return (
