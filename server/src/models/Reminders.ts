@@ -21,6 +21,7 @@ const Reminders = mongoose.model('Reminders', RemindersSchema);
 export default Reminders;
 
 export interface Reminder {
+  _id?: ObjectId;
   name: string;
   description?: string;
   dateStarted: Date;

@@ -1,13 +1,13 @@
-1) adding timer page
+1) get all timers in backend
 
-2) get all timers in backend
+2) get all timers page
 
-3) get all timers page
+3) refactor
 
-4) emit finished timers 
+4) styles
 
-5) styles
+5) animations
 
-6) animations
+6) move to logger
 
 7) deployment

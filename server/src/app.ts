@@ -6,7 +6,7 @@ import connectDb from './utils/database';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 
-import socket from './utils/socket';
+import socket from './controller/socket';
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = express();
