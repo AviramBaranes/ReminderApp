@@ -23,3 +23,15 @@
     }
   }
 }
+
+@media (min-width: $desktop-viewport) {
+  .TitleContainer {
+    margin: 3.4rem 0rem;
+    h2 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1.2rem;
+    }
+  }
+}

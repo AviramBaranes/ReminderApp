@@ -1,9 +1,7 @@
-import React, { SetStateAction, useState } from 'react';
-import Image from 'next/image';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import classes from '../../styles/UI/TimerForm.module.scss';
-import playIcon from '../../public/playIcon.png';
 import { EVENTS } from '../../EVENTS/events';
 import { RootState } from '../../redux/store/store';
 import { Reminder } from '../../types/Reminder';
@@ -34,6 +32,7 @@ const TimerForm: React.FC<{
 
   function timeInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { value, name } = e.target;
+    if (isNaN(+value)) return;
     const maxNumber = name === 'hours' ? 23 : 59;
     let newValue = value;
 
@@ -52,7 +51,6 @@ const TimerForm: React.FC<{
 
   function formSubmitHandler(e: React.FormEvent) {
     e.preventDefault();
-
     setError('');
 
     if (name.length < 2) {
@@ -102,38 +100,46 @@ const TimerForm: React.FC<{
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <label htmlFor='name'>title</label>
+        <label className={name.length ? 'Active' : ''} htmlFor='name'>
+          title
+        </label>
       </div>
       <fieldset>
         <div className='input-container'>
           <input
             onChange={timeInputChangeHandler}
-            type='number'
+            type='text'
             name='hours'
             id='hours'
             value={hours}
           />
-          <label htmlFor='hours'>hours</label>
+          <label className={hours.length ? 'Active' : ''} htmlFor='hours'>
+            hours
+          </label>
         </div>
         <div className='input-container'>
           <input
             onChange={timeInputChangeHandler}
-            type='number'
+            type='text'
             name='minutes'
             id='minutes'
             value={minutes}
           />
-          <label htmlFor='minutes'>minutes</label>
+          <label className={minutes.length ? 'Active' : ''} htmlFor='minutes'>
+            minutes
+          </label>
         </div>
         <div className='input-container'>
           <input
             onChange={timeInputChangeHandler}
-            type='number'
+            type='text'
             name='seconds'
             id='seconds'
             value={seconds}
           />
-          <label htmlFor='seconds'>seconds</label>
+          <label className={seconds.length ? 'Active' : ''} htmlFor='seconds'>
+            seconds
+          </label>
         </div>
       </fieldset>
       <div className='input-container'>
@@ -145,7 +151,12 @@ const TimerForm: React.FC<{
           rows={3}
           value={description}
         ></textarea>
-        <label htmlFor='description'>description</label>
+        <label
+          className={description.length ? 'Active' : ''}
+          htmlFor='description'
+        >
+          description
+        </label>
       </div>
       <button className={classes.Btn}>Start</button>
     </form>

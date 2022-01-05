@@ -7,14 +7,6 @@
   max-width: 55%;
   margin: 0.5rem auto;
 
-  .inValid {
-    background-color: salmon;
-    border: 2px red solid;
-    + label {
-      color: red;
-    }
-  }
-
   .Active {
     transform: translate(0, 5px) scale(0.8);
     color: $primary-color;
@@ -68,6 +60,21 @@
     input,
     textarea {
       padding: 1.5rem 1rem 0.3rem 0.9rem;
+    }
+  }
+}
+
+@media (min-width: $desktop-viewport) {
+  .input-container {
+    margin: 0.6rem auto;
+  }
+}
+
+@media (min-width: $big-desktop-viewport) {
+  .input-container {
+    margin: 1rem auto;
+    input {
+      padding: 1.8rem 1.5rem 0.3rem 1.35rem;
     }
   }
 }

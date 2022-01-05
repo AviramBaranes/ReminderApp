@@ -10,8 +10,8 @@
     width: 55%;
     margin: auto;
     input {
-      margin: auto;
       width: 95%;
+      margin: auto;
       padding-left: 0.5rem;
     }
     label {
@@ -29,6 +29,7 @@
   border: 2px solid $primary-color;
   font-size: 1rem;
   font-weight: bold;
+  cursor: pointer;
 }
 
 @media (min-width: $big-phone-viewport) {
@@ -59,5 +60,36 @@
 
   .Btn {
     margin-top: 3rem;
+  }
+}
+
+@media (min-width: $desktop-viewport) {
+  .Form {
+    width: 80%;
+    margin: auto;
+    fieldset {
+      input {
+        width: 98%;
+      }
+    }
+  }
+
+  .Btn {
+    margin-top: 4rem;
+  }
+}
+@media (min-width: $big-desktop-viewport) {
+  .Form {
+    width: 70%;
+    margin: auto;
+    fieldset {
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  .Btn {
+    margin-top: 4rem;
   }
 }

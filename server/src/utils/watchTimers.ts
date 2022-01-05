@@ -5,7 +5,7 @@ import { EVENTS } from '../controller/socket';
 import Reminders, { Reminder, RemindersType } from '../models/Reminders';
 import { getTimeLeft } from './timeLeftCalculator';
 
-const HEADS_UP = 10_000;
+const HEADS_UP = 3_000;
 
 export const watchTimers = async (
   userId: string,
@@ -42,7 +42,9 @@ export const checkReminder = (
         name: reminder.name,
         done: false,
       });
-      deleteReminder(reminder._id!, reminders);
+      setTimeout(() => {
+        deleteReminder(reminder._id!, reminders);
+      }, HEADS_UP);
     }, timeOut - HEADS_UP);
 
     socket.on('disconnected', () => clearTimeout(timeout));

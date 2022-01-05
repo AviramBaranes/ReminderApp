@@ -7,7 +7,7 @@ exports.checkReminder = exports.watchTimers = void 0;
 const socket_1 = require("../controller/socket");
 const Reminders_1 = __importDefault(require("../models/Reminders"));
 const timeLeftCalculator_1 = require("./timeLeftCalculator");
-const HEADS_UP = 10000;
+const HEADS_UP = 3000;
 const watchTimers = async (userId, io, socket) => {
     const remindersModel = (await Reminders_1.default.findById(userId));
     remindersModel.reminders.forEach((reminder) => (0, exports.checkReminder)(reminder, io, socket, remindersModel));
@@ -31,7 +31,9 @@ const checkReminder = (reminder, io, socket, reminders) => {
                 name: reminder.name,
                 done: false,
             });
-            deleteReminder(reminder._id, reminders);
+            setTimeout(() => {
+                deleteReminder(reminder._id, reminders);
+            }, HEADS_UP);
         }, timeOut - HEADS_UP);
         socket.on('disconnected', () => clearTimeout(timeout));
     }

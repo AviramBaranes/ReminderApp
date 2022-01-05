@@ -56,11 +56,39 @@
   .Nav {
     margin: 2rem auto;
     .Logo {
+      transform: scale(1.2);
       font-size: 1.4rem;
     }
     ul {
       font-size: 1.2rem;
       width: 40%;
+    }
+  }
+}
+
+@media (min-width: $desktop-viewport) {
+  .Nav {
+    margin-top: 2.3rem;
+    margin-bottom: 3.2rem;
+    .Logo {
+      transform: scale(1.3);
+      font-size: 1.5rem;
+    }
+    ul {
+      font-size: 1.4rem;
+      width: 35%;
+    }
+  }
+}
+@media (min-width: $big-desktop-viewport) {
+  .Nav {
+    .Logo {
+      transform: scale(1.4);
+      width: 18%;
+    }
+    ul {
+      font-size: 1.4rem;
+      width: 30%;
     }
   }
 }
