@@ -65,7 +65,6 @@ const Layout: React.FC = ({ children }) => {
         { name, timeLeft, done },
       ]);
       setShowModals(true);
-      console.log({ name, timeLeft, done });
     });
   }, [userId]);
 

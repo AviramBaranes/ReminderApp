@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TimerForm from '../components/TimerForm/TimerForm';
 import ReminderCreatedInfo from '../components/UI/Info/ReminderCreatedInfo';
 
@@ -7,6 +7,8 @@ import Title from '../components/UI/TextComponents/Title';
 
 const timer: NextPage = () => {
   const [showInfoModal, setShowInfoModal] = useState(false);
+
+  useEffect(() => () => setShowInfoModal(false), []);
 
   return (
     <>

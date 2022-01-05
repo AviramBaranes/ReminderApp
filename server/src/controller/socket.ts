@@ -110,8 +110,6 @@ function socket(io: Server) {
           userId
         )) as RemindersType;
 
-        console.log(reminders);
-
         const calculatedReminders = reminders.map((reminder) => {
           const timeLeft = getTimeLeft(reminder);
 
@@ -129,7 +127,6 @@ function socket(io: Server) {
 
           return calculatedReminder;
         });
-        console.log({ calculatedReminders });
 
         io.to(socket.id).emit(EVENTS.SERVER.ALL_TIMERS, {
           calculatedReminders,

@@ -95,7 +95,6 @@ function socket(io) {
         socket.on(exports.EVENTS.CLIENT.GET_TIMERS, async ({ userId }) => {
             try {
                 const { reminders } = (await Reminders_1.default.findById(userId));
-                console.log(reminders);
                 const calculatedReminders = reminders.map((reminder) => {
                     const timeLeft = (0, timeLeftCalculator_1.getTimeLeft)(reminder);
                     const calculatedReminder = {
@@ -106,7 +105,6 @@ function socket(io) {
                         calculatedReminder.description = reminder.description;
                     return calculatedReminder;
                 });
-                console.log({ calculatedReminders });
                 io.to(socket.id).emit(exports.EVENTS.SERVER.ALL_TIMERS, {
                     calculatedReminders,
                 });
