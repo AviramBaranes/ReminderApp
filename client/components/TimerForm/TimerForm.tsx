@@ -66,7 +66,7 @@ const TimerForm: React.FC<{
       return;
     }
     if (!socket) {
-      //handler error
+      setError('Something went wrong try to refresh');
       return;
     }
 

@@ -1,4 +1,3 @@
-import { NextComponentType } from 'next';
 import { useEffect, useState } from 'react';
 import openSocket from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +6,6 @@ import Navigation from './Navigation';
 import { RootState } from '../../redux/store/store';
 import { socketActions } from '../../redux/slices/socketSlice';
 import { EVENTS } from '../../EVENTS/events';
-import TimerFinishedInfo from '../UI/Info/TimerFinishedInfo';
 import TimersFinishedList, {
   FinishedTimer,
 } from '../UI/Info/TimersFinishedList';

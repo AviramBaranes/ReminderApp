@@ -1,13 +1,13 @@
-1) handle timer done
+1) handle errors
 
-2) handle errors
+2) refactor
 
-3) refactor
+2.5) type safe
 
-4) styles
+3) styles
 
-5) animations
+4) animations
 
-6) move to logger
+5) move to logger
 
-7) deployment
+6) deployment
