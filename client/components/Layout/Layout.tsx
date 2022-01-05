@@ -8,17 +8,16 @@ import { RootState } from '../../redux/store/store';
 import { socketActions } from '../../redux/slices/socketSlice';
 import { EVENTS } from '../../EVENTS/events';
 import TimerFinishedInfo from '../UI/Info/TimerFinishedInfo';
+import TimersFinishedList, {
+  FinishedTimer,
+} from '../UI/Info/TimersFinishedList';
 
 const Layout: React.FC = ({ children }) => {
   const dispatch = useDispatch();
-  const [showModal, setShowModal] = useState(false);
-  const [finishedTimersData, setFinishedTimersData] = useState<
-    {
-      done: boolean;
-      name: string;
-      timeLeft?: number;
-    }[]
-  >([]);
+  const [showModals, setShowModals] = useState(false);
+  const [finishedTimersList, setFinishedTimersList] = useState<FinishedTimer[]>(
+    []
+  );
 
   const { socket, userId } = useSelector(
     (state: RootState) => state.socketSlice
@@ -63,27 +62,24 @@ const Layout: React.FC = ({ children }) => {
 
     socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
     socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {
-      setFinishedTimersData((prevState) => [
+      setFinishedTimersList((prevState) => [
         ...prevState,
         { name, timeLeft, done },
       ]);
-      setShowModal(true);
+      setShowModals(true);
       console.log({ name, timeLeft, done });
     });
   }, [userId]);
 
   return (
     <>
-      {showModal &&
-        finishedTimersData.map((finishedTimerData, i) => (
-          <TimerFinishedInfo
-            key={(finishedTimerData.timeLeft || 0) + i}
-            done={finishedTimerData!.done}
-            timeLeft={finishedTimerData?.timeLeft}
-            name={finishedTimerData!.name}
-            setShowModal={setShowModal}
-          />
-        ))}
+      {showModals && (
+        <TimersFinishedList
+          finishedTimersList={finishedTimersList}
+          setFinishedTimersList={setFinishedTimersList}
+          setShowModals={setShowModals}
+        />
+      )}
       <Navigation />
       {children}
     </>

@@ -14,7 +14,7 @@ export const EVENTS = {
   },
   SERVER: {
     USER_CREATED: 'USER_CREATED',
-    NEW_TIMER: 'NEW_TIMER',
+    TIMER_CREATED: 'TIMER_CREATED',
     ALL_TIMERS: 'ALL_TIMERS',
     TIMER_DONE: 'TIMER_DONE',
     ERROR: 'ERROR',
@@ -24,7 +24,6 @@ export const EVENTS = {
 function socket(io: Server) {
   io.on(EVENTS.connection, async (socket: Socket) => {
     console.log('Socket connected');
-
     socket.on(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, async ({ userId }) => {
       if (!userId) {
         io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
@@ -33,7 +32,7 @@ function socket(io: Server) {
         return;
       }
 
-      await watchTimers(userId, io, socket.id);
+      await watchTimers(userId, io, socket);
     });
 
     socket.on(
@@ -76,10 +75,12 @@ function socket(io: Server) {
             return;
           }
 
+          const dateStarted = new Date(date);
+
           const newReminder: Reminder = {
             name,
             time,
-            dateStarted: new Date(date),
+            dateStarted,
           };
 
           if (description) newReminder.description = description;
@@ -87,8 +88,13 @@ function socket(io: Server) {
           userReminders.reminders.push(newReminder);
           await userReminders.save();
 
-          io.to(socket.id).emit(EVENTS.SERVER.NEW_TIMER);
-          checkReminder(newReminder, io, socket.id, userReminders);
+          const reminderToCheck = userReminders.reminders.find(
+            (reminder) =>
+              reminder.dateStarted.getTime() === dateStarted.getTime()
+          )!;
+
+          io.to(socket.id).emit(EVENTS.SERVER.TIMER_CREATED);
+          checkReminder(reminderToCheck, io, socket, userReminders);
         } catch (err) {
           console.log(err);
           io.to(socket.id).emit(EVENTS.SERVER.ERROR, {

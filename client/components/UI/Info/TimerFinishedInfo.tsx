@@ -1,11 +1,11 @@
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 
 import classes from '../../../styles/UI/TimerFinishedInfo.module.scss';
 import InfoModal from '../Modals/InfoModal';
 
 interface TimerFinishedInfoProps {
-  setShowModal: React.Dispatch<SetStateAction<boolean>>;
+  setNumberOfFinishedTimers: React.Dispatch<SetStateAction<number>>;
   done: boolean;
   name: string;
   timeLeft?: number;
@@ -15,12 +15,23 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
   name,
   done,
   timeLeft,
-  setShowModal,
+  setNumberOfFinishedTimers,
 }) => {
+  const [finishedTimer, setFinishedTimer] = useState(false);
+  const [shouldDisplay, setShouldDisplay] = useState(true);
+
+  useEffect(() => {
+    if (finishedTimer) setNumberOfFinishedTimers((prev) => prev + 1);
+
+    return () => setShouldDisplay(false);
+  }, [finishedTimer]);
+
+  setTimeout(() => {
+    setFinishedTimer(true);
+    setShouldDisplay(false);
+  }, timeLeft);
+
   const renderTime = ({ remainingTime }: { remainingTime: number }) => {
-    if (remainingTime === 0) {
-      return setShowModal(false);
-    }
     return (
       <div>
         <h2>{remainingTime}</h2>
@@ -30,7 +41,7 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
   };
 
   return (
-    <InfoModal modalClassName={classes.Container}>
+    <InfoModal shouldDisplay={shouldDisplay} modalClassName={classes.Container}>
       {done ? (
         <h4>{name} is finished</h4>
       ) : (

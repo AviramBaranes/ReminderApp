@@ -5,15 +5,17 @@ import { EVENTS } from '../controller/socket';
 import Reminders, { Reminder, RemindersType } from '../models/Reminders';
 import { getTimeLeft } from './timeLeftCalculator';
 
+const HEADS_UP = 10_000;
+
 export const watchTimers = async (
   userId: string,
   io: Server,
-  socketId: Socket['id']
+  socket: Socket
 ) => {
   const remindersModel = (await Reminders.findById(userId)) as RemindersType;
 
   remindersModel.reminders.forEach((reminder) =>
-    checkReminder(reminder, io, socketId, remindersModel)
+    checkReminder(reminder, io, socket, remindersModel)
   );
 };
 
@@ -22,29 +24,28 @@ export const watchTimers = async (
 export const checkReminder = (
   reminder: Reminder,
   io: Server,
-  socketId: Socket['id'],
+  socket: Socket,
   reminders: RemindersType
 ) => {
   const timeOut = getTimeLeft(reminder);
 
-  console.log(timeOut);
-
   if (timeOut < 0) {
-    io.to(socketId).emit(EVENTS.SERVER.TIMER_DONE, {
+    io.to(socket.id).emit(EVENTS.SERVER.TIMER_DONE, {
       name: reminder.name,
       done: true,
     });
     deleteReminder(reminder._id!, reminders);
   } else {
-    setTimeout(() => {
-      console.log('done');
-
-      io.to(socketId).emit(EVENTS.SERVER.TIMER_DONE, {
+    const timeout = setTimeout(() => {
+      io.to(socket.id).emit(EVENTS.SERVER.TIMER_DONE, {
+        timeLeft: HEADS_UP,
         name: reminder.name,
         done: false,
       });
       deleteReminder(reminder._id!, reminders);
-    }, timeOut - 10000);
+    }, timeOut - HEADS_UP);
+
+    socket.on('disconnected', () => clearTimeout(timeout));
   }
 };
 
@@ -55,11 +56,11 @@ async function deleteReminder(
   try {
     const { reminders } = remindersModel;
 
-    const currentReminderIndex = reminders.findIndex(
-      (r) => r._id === reminderId
+    const updatedReminders = reminders.filter(
+      (r) => r._id!.toString() !== reminderId.toString()
     );
-    reminders.splice(currentReminderIndex, 1);
 
+    remindersModel.reminders = updatedReminders;
     await remindersModel.save();
   } catch (err) {
     console.log(err);

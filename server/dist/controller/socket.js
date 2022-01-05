@@ -17,7 +17,7 @@ exports.EVENTS = {
     },
     SERVER: {
         USER_CREATED: 'USER_CREATED',
-        NEW_TIMER: 'NEW_TIMER',
+        TIMER_CREATED: 'TIMER_CREATED',
         ALL_TIMERS: 'ALL_TIMERS',
         TIMER_DONE: 'TIMER_DONE',
         ERROR: 'ERROR',
@@ -33,7 +33,7 @@ function socket(io) {
                 });
                 return;
             }
-            await (0, watchTimers_1.watchTimers)(userId, io, socket.id);
+            await (0, watchTimers_1.watchTimers)(userId, io, socket);
         });
         socket.on(exports.EVENTS.CLIENT.NEW_TIMER, async ({ userId, name, time, date, description }) => {
             try {
@@ -71,17 +71,19 @@ function socket(io) {
                     });
                     return;
                 }
+                const dateStarted = new Date(date);
                 const newReminder = {
                     name,
                     time,
-                    dateStarted: new Date(date),
+                    dateStarted,
                 };
                 if (description)
                     newReminder.description = description;
                 userReminders.reminders.push(newReminder);
                 await userReminders.save();
-                io.to(socket.id).emit(exports.EVENTS.SERVER.NEW_TIMER);
-                (0, watchTimers_1.checkReminder)(newReminder, io, socket.id, userReminders);
+                const reminderToCheck = userReminders.reminders.find((reminder) => reminder.dateStarted.getTime() === dateStarted.getTime());
+                io.to(socket.id).emit(exports.EVENTS.SERVER.TIMER_CREATED);
+                (0, watchTimers_1.checkReminder)(reminderToCheck, io, socket, userReminders);
             }
             catch (err) {
                 console.log(err);
