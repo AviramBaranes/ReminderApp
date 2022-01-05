@@ -19,7 +19,7 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
 }) => {
   const renderTime = ({ remainingTime }: { remainingTime: number }) => {
     if (remainingTime === 0) {
-      return setShowModal(true);
+      return setShowModal(false);
     }
     return (
       <div>
@@ -29,26 +29,26 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
     );
   };
 
-  const NotFinishedReminder = (
-    <>
-      <h4>{name} is about to finish</h4>
-      <CountdownCircleTimer
-        isPlaying
-        duration={timeLeft!}
-        colors={[
-          ['#004777', 0.33],
-          ['#F7B801', 0.33],
-          ['#A30000', 0.33],
-        ]}
-      >
-        {renderTime}
-      </CountdownCircleTimer>
-    </>
-  );
-
   return (
     <InfoModal modalClassName={classes.Container}>
-      {done ? <h4>{name} is finished</h4> : { NotFinishedReminder }}
+      {done ? (
+        <h4>{name} is finished</h4>
+      ) : (
+        <>
+          <h4>{name} is about to finish</h4>
+          <CountdownCircleTimer
+            isPlaying
+            duration={timeLeft! / 1000}
+            colors={[
+              ['#004777', 0.33],
+              ['#F7B801', 0.33],
+              ['#A30000', 0.33],
+            ]}
+          >
+            {renderTime}
+          </CountdownCircleTimer>
+        </>
+      )}
     </InfoModal>
   );
 };

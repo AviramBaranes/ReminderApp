@@ -12,11 +12,13 @@ import TimerFinishedInfo from '../UI/Info/TimerFinishedInfo';
 const Layout: React.FC = ({ children }) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
-  const [finishedTimerData, setFinishedTimerData] = useState<{
-    done: boolean;
-    name: string;
-    timeLeft?: number;
-  } | null>(null);
+  const [finishedTimersData, setFinishedTimersData] = useState<
+    {
+      done: boolean;
+      name: string;
+      timeLeft?: number;
+    }[]
+  >([]);
 
   const { socket, userId } = useSelector(
     (state: RootState) => state.socketSlice
@@ -31,49 +33,57 @@ const Layout: React.FC = ({ children }) => {
     }
   }
 
+  //get socket connection
   useEffect(() => {
     if (!socket) {
       const socket = openSocket(process.env.baseURL as string);
       dispatch(socketActions.newSocket({ socket }));
     }
-    //
-    else {
-      socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {
-        // setFinishedTimerData({ name, timeLeft, done });
-        // setShowModal(true);
-        console.log({ name, timeLeft, done });
-      });
-      if (userId) {
-        socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
-      }
-      //
-      else {
-        const userIdFromCookie = getUserIdCookie();
+  }, []);
 
-        if (userIdFromCookie) {
-          dispatch(socketActions.newUser({ userId: userIdFromCookie }));
-        }
-        //
-        else {
-          socket.on(EVENTS.SERVER.USER_CREATED, ({ userId }) => {
-            document.cookie = `userId=${userId};path=/;`;
-            dispatch(socketActions.newUser({ userId }));
-          });
-        }
+  //get userId
+  useEffect(() => {
+    if (!socket) return;
+    if (!userId) {
+      const userIdFromCookie = getUserIdCookie();
+      if (userIdFromCookie) {
+        dispatch(socketActions.newUser({ userId: userIdFromCookie }));
+      } else {
+        socket.on(EVENTS.SERVER.USER_CREATED, ({ userId }) => {
+          document.cookie = `userId=${userId};path=/;`;
+          dispatch(socketActions.newUser({ userId }));
+        });
       }
     }
-  }, [socket, userId]);
+  }, [socket]);
+
+  //listen and broadcast events
+  useEffect(() => {
+    if (!socket || !userId) return;
+
+    socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
+    socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {
+      setFinishedTimersData((prevState) => [
+        ...prevState,
+        { name, timeLeft, done },
+      ]);
+      setShowModal(true);
+      console.log({ name, timeLeft, done });
+    });
+  }, [userId]);
 
   return (
     <>
-      {/* {showModal && (
-        <TimerFinishedInfo
-          done={finishedTimerData!.done}
-          timeLeft={finishedTimerData?.timeLeft}
-          name={finishedTimerData!.name}
-          setShowModal={setShowModal}
-        />
-      )} */}
+      {showModal &&
+        finishedTimersData.map((finishedTimerData, i) => (
+          <TimerFinishedInfo
+            key={(finishedTimerData.timeLeft || 0) + i}
+            done={finishedTimerData!.done}
+            timeLeft={finishedTimerData?.timeLeft}
+            name={finishedTimerData!.name}
+            setShowModal={setShowModal}
+          />
+        ))}
       <Navigation />
       {children}
     </>
