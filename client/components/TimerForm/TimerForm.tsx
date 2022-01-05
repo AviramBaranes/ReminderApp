@@ -1,5 +1,9 @@
 import React, { SetStateAction, useState } from 'react';
+import Image from 'next/image';
 import { useSelector } from 'react-redux';
+
+import classes from '../../styles/UI/TimerForm.module.scss';
+import playIcon from '../../public/playIcon.png';
 import { EVENTS } from '../../EVENTS/events';
 import { RootState } from '../../redux/store/store';
 import { Reminder } from '../../types/Reminder';
@@ -88,7 +92,7 @@ const TimerForm: React.FC<{
   }
 
   return (
-    <form onSubmit={formSubmitHandler}>
+    <form onSubmit={formSubmitHandler} className={classes.Form}>
       <p>{error}</p>
       <div className='input-container'>
         <input
@@ -138,12 +142,12 @@ const TimerForm: React.FC<{
           onChange={(e) => setDescription(e.target.value)}
           id='description'
           cols={30}
-          rows={10}
+          rows={3}
           value={description}
         ></textarea>
         <label htmlFor='description'>description</label>
       </div>
-      <button type='submit'>start</button>
+      <button className={classes.Btn}>Start</button>
     </form>
   );
 };

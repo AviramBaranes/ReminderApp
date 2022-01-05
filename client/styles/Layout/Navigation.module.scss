@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&family=The+Nautigal:wght@700&display=swap');
+@import '../variables.scss';
+
+.Nav {
+  margin: 1.5rem auto;
+  display: flex;
+  justify-content: space-between;
+  .Logo {
+    width: 25%;
+    text-align: center;
+    font-family: 'The Nautigal', cursive;
+  }
+
+  ul {
+    font-family: 'Nunito Sans', sans-serif;
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .Active {
+    font-weight: bold;
+    color: $primary-color;
+    border-bottom: 2px solid $primary-color;
+  }
+
+  .NotActive {
+    &::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background-color: $primary-color;
+      width: 0;
+      transition: width 0.3s;
+    }
+    &:hover::after {
+      width: 100%;
+      transition: width 0.3s;
+    }
+  }
+}
+
+@media (min-width: $big-phone-viewport) {
+  .Nav {
+    ul {
+      width: 55%;
+      li {
+        margin: 0.5rem;
+      }
+    }
+  }
+}
+
+@media (min-width: $tablet-viewport) {
+  .Nav {
+    margin: 2rem auto;
+    .Logo {
+      font-size: 1.4rem;
+    }
+    ul {
+      font-size: 1.2rem;
+      width: 40%;
+    }
+  }
+}

@@ -78,7 +78,7 @@ const Layout: React.FC = ({ children }) => {
         />
       )}
       <Navigation />
-      {children}
+      <main>{children}</main>
     </>
   );
 };

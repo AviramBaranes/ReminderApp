@@ -1,5 +1,7 @@
 import React from 'react';
 
+import classes from '../../../styles/UI/Title.module.scss';
+
 interface TitlePropsTypes {
   header: string;
   paragraph: string;
@@ -7,7 +9,7 @@ interface TitlePropsTypes {
 
 const Title: React.FC<TitlePropsTypes> = ({ header, paragraph }) => {
   return (
-    <div>
+    <div className={classes.TitleContainer}>
       <h2>{header}</h2>
       <p>{paragraph}</p>
     </div>

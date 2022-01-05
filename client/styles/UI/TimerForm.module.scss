@@ -1,0 +1,63 @@
+@import '../variables.scss';
+
+.Form {
+  text-align: center;
+  fieldset {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 55%;
+    margin: auto;
+    input {
+      margin: auto;
+      width: 95%;
+      padding-left: 0.5rem;
+    }
+    label {
+      font-size: 0.6rem;
+      transform: translate(-7px, 12px) scale(1);
+    }
+  }
+}
+
+.Btn {
+  margin-top: 2rem;
+  padding: 0.7rem 2.5rem;
+  border-radius: 0.3rem;
+  background-color: transparent;
+  border: 2px solid $primary-color;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+@media (min-width: $big-phone-viewport) {
+  .Form {
+    fieldset {
+      label {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .Btn {
+    margin-top: 3rem;
+  }
+}
+
+@media (min-width: $tablet-viewport) {
+  .Form {
+    label {
+      font-size: 1rem;
+    }
+    fieldset {
+      label {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .Btn {
+    margin-top: 3rem;
+  }
+}
