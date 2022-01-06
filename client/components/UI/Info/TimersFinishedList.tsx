@@ -1,10 +1,12 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
+import TimerFinishedInfoModal from '../Modals/TimerFinishedInfoModal';
 import TimerFinishedInfo from './TimerFinishedInfo';
 
 interface TimersFinishedListProps {
   setShowModals: React.Dispatch<SetStateAction<boolean>>;
   setFinishedTimersList: React.Dispatch<SetStateAction<FinishedTimer[]>>;
   finishedTimersList: FinishedTimer[];
+  showModals: boolean;
 }
 
 export interface FinishedTimer {
@@ -17,6 +19,7 @@ const TimersFinishedList: React.FC<TimersFinishedListProps> = ({
   setShowModals,
   finishedTimersList,
   setFinishedTimersList,
+  showModals,
 }) => {
   const [numberOfFinishedTimers, setNumberOfFinishedTimers] = useState(0);
 
@@ -26,9 +29,10 @@ const TimersFinishedList: React.FC<TimersFinishedListProps> = ({
       setShowModals(false);
     }
   }, [numberOfFinishedTimers]);
+  console.log(finishedTimersList);
 
   return (
-    <>
+    <TimerFinishedInfoModal shouldDisplay={showModals}>
       {finishedTimersList.map((finishedTimerData, i) => (
         <TimerFinishedInfo
           key={(finishedTimerData.timeLeft || 0) + i}
@@ -38,8 +42,7 @@ const TimersFinishedList: React.FC<TimersFinishedListProps> = ({
           setNumberOfFinishedTimers={setNumberOfFinishedTimers}
         />
       ))}
-      )
-    </>
+    </TimerFinishedInfoModal>
   );
 };
 

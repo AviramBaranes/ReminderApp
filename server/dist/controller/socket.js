@@ -26,7 +26,6 @@ exports.EVENTS = {
 function socket(io) {
     io.on(exports.EVENTS.connection, async (socket) => {
         console.log('Socket connected');
-        socket.emit(exports.EVENTS.SERVER.ERROR, { message: 'this is a test' });
         socket.on(exports.EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, async ({ userId }) => {
             if (!userId) {
                 io.to(socket.id).emit(exports.EVENTS.SERVER.ERROR, {

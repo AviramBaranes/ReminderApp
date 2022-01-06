@@ -1,8 +1,9 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 
-import classes from '../../../styles/UI/TimerFinishedInfo.module.scss';
+import classes from '../../../styles/UI/TimerFinishedInfoModal.module.scss';
 import InfoModal from '../Modals/InfoModal';
+import TimerFinishedInfoModal from '../Modals/TimerFinishedInfoModal';
 
 interface TimerFinishedInfoProps {
   setNumberOfFinishedTimers: React.Dispatch<SetStateAction<number>>;
@@ -29,38 +30,45 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
   setTimeout(() => {
     setFinishedTimer(true);
     setShouldDisplay(false);
-  }, timeLeft);
+  }, (timeLeft || 0) + 700);
 
   const renderTime = ({ remainingTime }: { remainingTime: number }) => {
+    if (remainingTime === 0) {
+      return (
+        <div className={classes.TimerContent}>
+          <h4>Finished!</h4>
+        </div>
+      );
+    }
     return (
-      <div>
-        <h2>{remainingTime}</h2>
-        <p>Seconds Remaining</p>
+      <div className={classes.TimerContent}>
+        <h4>{remainingTime}</h4>
+        <p>Seconds Left</p>
       </div>
     );
   };
 
   return (
-    <InfoModal shouldDisplay={shouldDisplay} modalClassName={classes.Container}>
+    <div style={{ display: shouldDisplay ? 'block' : 'none' }}>
       {done ? (
         <h4>{name} is finished</h4>
       ) : (
-        <>
-          <h4>{name} is about to finish</h4>
-          <CountdownCircleTimer
-            isPlaying
-            duration={timeLeft! / 1000}
-            colors={[
-              ['#004777', 0.33],
-              ['#F7B801', 0.33],
-              ['#A30000', 0.33],
-            ]}
-          >
-            {renderTime}
-          </CountdownCircleTimer>
-        </>
+        <div className={classes.TimerCard}>
+          <p className={classes.Title}>{name} is about to be finished</p>
+          <div className={classes.CircleTimer}>
+            <CountdownCircleTimer
+              size={60}
+              strokeWidth={3}
+              isPlaying
+              duration={timeLeft! / 1000}
+              colors='#FF3131'
+            >
+              {renderTime}
+            </CountdownCircleTimer>
+          </div>
+        </div>
       )}
-    </InfoModal>
+    </div>
   );
 };
 

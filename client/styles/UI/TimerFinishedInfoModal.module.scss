@@ -1,0 +1,77 @@
+@import '../variables.scss';
+
+.Modal {
+  position: absolute;
+  top: 60vh;
+  right: 0;
+  width: 60%;
+  text-align: center;
+}
+
+.TimerCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+  padding: 1rem 0rem;
+  border: 1px solid red;
+  border-left: red 5px solid;
+  border-right: none;
+  border-radius: 0.6rem 0 0 0.6rem;
+}
+.Title {
+  width: 50%;
+  font-size: 0.7rem;
+}
+.TimerContent {
+  p {
+    width: 80%;
+    margin: auto;
+    font-size: 0.6rem;
+    text-align: center;
+  }
+}
+
+@media (min-width: $big-phone-viewport) {
+  .Modal {
+    top: 65vh;
+    width: 55%;
+  }
+}
+
+@media (min-width: $tablet-viewport) {
+  .Modal {
+    top: 72vh;
+    width: 50%;
+  }
+  .Title {
+    font-size: 0.9rem;
+  }
+}
+@media (min-width: $desktop-viewport) {
+  .Modal {
+    top: 70vh;
+    width: 30%;
+  }
+  .TimerCard {
+    padding: 1.5rem 1rem;
+  }
+  .Title {
+    font-size: 1rem;
+  }
+  .CircleTimer {
+    transform: scale(1.1);
+  }
+}
+@media (min-width: $big-desktop-viewport) {
+  .Modal {
+    top: 75vh;
+    width: 25%;
+  }
+  .TimerCard {
+    padding: 1.65rem 1rem;
+  }
+  .CircleTimer {
+    transform: scale(1.24);
+  }
+}

@@ -36,8 +36,8 @@ const TimersList: React.FC = () => {
 
   return (
     <div>
-      {!userId && <NoTimers />}
-      {remindersList?.length && userId ? (
+      {(!userId || !remindersList?.length) && <NoTimers />}
+      {remindersList && userId ? (
         <ul>
           {remindersList.map((reminder) => (
             <TimersListItem key={reminder.timeLeft} reminder={reminder} />

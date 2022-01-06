@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import classes from '../../../styles/UI/ErrorContainer.module.scss';
 import { EVENTS } from '../../../EVENTS/events';
 import { RootState } from '../../../redux/store/store';
-import InfoModal from './InfoModal';
+import InfoModal from '../Modals/InfoModal';
 
 const ErrorContainer: React.FC = () => {
   const { socket } = useSelector((state: RootState) => state.socketSlice);
@@ -18,7 +18,7 @@ const ErrorContainer: React.FC = () => {
       setErrorMessage(message);
       setHasError(true);
 
-      // setTimeout(() => setHasError(false), 3000);
+      setTimeout(() => setHasError(false), 3000);
     });
   }, [socket]);
 
