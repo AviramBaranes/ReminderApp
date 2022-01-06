@@ -1,0 +1,113 @@
+@import '../variables.scss';
+
+.ListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.3rem;
+  background: #f4f4f4;
+  padding: 0.7rem;
+  border: 1px solid $primary-color;
+}
+
+.Content {
+  h5 {
+    color: $primary-color;
+    margin-bottom: 0.4rem;
+  }
+  p {
+    font-size: 0.7rem;
+  }
+}
+
+.Time {
+  font-size: 0.7rem;
+  color: black;
+}
+
+.NoTimers {
+  text-align: center;
+  color: red;
+  font-size: 0.9rem;
+
+  span {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: $big-phone-viewport) {
+  .ListItem {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+  }
+
+  .Content {
+    h5 {
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+    }
+    width: 70%;
+    p {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@media (min-width: $tablet-viewport) {
+  .ListItem {
+    margin: auto;
+    margin-bottom: 1.5rem;
+    padding: 1.3rem;
+    width: 80%;
+  }
+}
+
+@media (min-width: $desktop-viewport) {
+  .ListItem {
+    width: 60%;
+    margin: auto;
+    margin-bottom: 1.5rem;
+    padding: 1.4rem;
+  }
+
+  .Content {
+    h5 {
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+    width: 70%;
+    p {
+      font-size: 0.85rem;
+    }
+  }
+  .NoTimers {
+    font-size: 1.1rem;
+  }
+  .TimerCircle {
+    transform: scale(1.1);
+  }
+}
+
+@media (min-width: $big-desktop-viewport) {
+  .ListItem {
+    width: 55%;
+    margin: auto;
+    margin-bottom: 1.5rem;
+    padding: 2rem 3rem;
+  }
+
+  .Content {
+    h5 {
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+    }
+    width: 60%;
+    p {
+      font-size: 0.9rem;
+    }
+  }
+  .TimerCircle {
+    transform: scale(1.2);
+  }
+}

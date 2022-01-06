@@ -1,0 +1,18 @@
+@import '../variables.scss';
+
+.Container {
+  font-size: 0.8rem;
+  padding: 2rem;
+  background-color: salmon;
+}
+
+@media (min-width: $tablet-viewport) {
+  .Container {
+    font-size: 1rem;
+  }
+}
+@media (min-width: $desktop-viewport) {
+  .Container {
+    font-size: 1.2rem;
+  }
+}

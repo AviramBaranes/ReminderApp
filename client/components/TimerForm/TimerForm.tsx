@@ -1,7 +1,7 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import classes from '../../styles/UI/TimerForm.module.scss';
+import classes from '../../styles/pages/TimerForm.module.scss';
 import { EVENTS } from '../../EVENTS/events';
 import { RootState } from '../../redux/store/store';
 import { Reminder } from '../../types/Reminder';
@@ -82,9 +82,13 @@ const TimerForm: React.FC<{
     if (userId) payload.userId = userId;
 
     socket.emit(EVENTS.CLIENT.NEW_TIMER, payload);
+
     socket.on(EVENTS.SERVER.TIMER_CREATED, () => {
       setShowInfoModal(true);
-
+      setName('');
+      setTime({ hours: '', minutes: '', seconds: '' });
+      setDescription('');
+      setError('');
       setTimeout(() => setShowInfoModal(false), 3000);
     });
   }

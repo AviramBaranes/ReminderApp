@@ -11,3 +11,10 @@
 5) move to logger
 
 6) deployment
+
+
+BUGS:
+1) delete finished task on front end
+2) cookies in firefox
+3) CountdownCircleTimer component will receive initialRemainingTime
+4) keep time in DB and not date

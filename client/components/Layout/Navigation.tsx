@@ -20,14 +20,14 @@ const Navigation: React.FC = () => {
               pathname === '/timer' ? classes.Active : classes.NotActive
             }
           >
-            <Link href='/timer'>New Timer</Link>
+            <Link href='/timer'>New Reminder</Link>
           </li>
           <li
             className={
               pathname === '/list-timers' ? classes.Active : classes.NotActive
             }
           >
-            <Link href='/list-timers'>All Timers</Link>
+            <Link href='/list-timers'>All Reminders</Link>
           </li>
         </ul>
       </nav>

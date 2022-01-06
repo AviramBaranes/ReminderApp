@@ -1,5 +1,7 @@
 import React from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+
+import classes from '../../styles/pages/TimersList.module.scss';
 import { CalculatedReminder } from './TimersList';
 
 const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
@@ -20,7 +22,7 @@ const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
 
     return (
       <div>
-        <p>
+        <p className={classes.Time}>
           {hours}:{minutes}:{seconds}
         </p>
       </div>
@@ -28,22 +30,22 @@ const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
   };
 
   return (
-    <li>
-      <div>
-        <h4>{reminder.name}</h4>
+    <li className={classes.ListItem}>
+      <div className={classes.Content}>
+        <h5>{reminder.name}</h5>
         {reminder.description && <p>{reminder.description}</p>}
       </div>
-      <CountdownCircleTimer
-        isPlaying
-        duration={reminder.timeLeft! / 1000 || 0}
-        colors={[
-          ['#004777', 0.33],
-          ['#F7B801', 0.33],
-          ['#A30000', 0.33],
-        ]}
-      >
-        {renderTime}
-      </CountdownCircleTimer>
+      <div className={classes.TimerCircle}>
+        <CountdownCircleTimer
+          isPlaying
+          size={50}
+          strokeWidth={2}
+          duration={reminder.timeLeft! / 1000 || 0}
+          colors='#0fc4b2'
+        >
+          {renderTime}
+        </CountdownCircleTimer>
+      </div>
     </li>
   );
 };

@@ -1,4 +1,27 @@
-.container {
-  background-color: rgba(45, 194, 45, 0.755);
-  color: white;
+@import '../variables.scss';
+
+.Container {
+  font-size: 0.6rem;
+  h3 {
+    letter-spacing: 2px;
+  }
+  background-color: rgb(12, 199, 12);
+  h3 {
+    margin-bottom: 1rem;
+  }
+  span {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+@media (min-width: $tablet-viewport) {
+  .Container {
+    font-size: 0.8rem;
+  }
+}
+@media (min-width: $desktop-viewport) {
+  .Container {
+    font-size: 0.8rem;
+  }
 }

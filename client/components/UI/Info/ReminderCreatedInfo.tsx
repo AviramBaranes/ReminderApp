@@ -7,7 +7,7 @@ import InfoModal from '../Modals/InfoModal';
 const ReminderCreatedInfo: React.FC = () => {
   return (
     <InfoModal modalClassName={classes.Container}>
-      <h3>Reminder Created Successfully</h3>
+      <h3>Reminder Created!</h3>
       <p>
         You can see your reminder{' '}
         <Link href='/list-timers'>

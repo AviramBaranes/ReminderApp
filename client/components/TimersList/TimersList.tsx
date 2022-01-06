@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+
 import { EVENTS } from '../../EVENTS/events';
 import { RootState } from '../../redux/store/store';
 import LoadingClock from '../UI/Loading/LoadingClock';
@@ -34,22 +35,18 @@ const TimersList: React.FC = () => {
   }, [userId, socket]);
 
   return (
-    <>
-      {(!userId || !remindersList?.length) && <NoTimers />}
-      {remindersList && userId ? (
+    <div>
+      {!userId && <NoTimers />}
+      {remindersList?.length && userId ? (
         <ul>
-          {remindersList.map((reminder) =>
-            reminder.timeLeft ? (
-              <TimersListItem key={reminder.timeLeft} reminder={reminder} />
-            ) : (
-              <h4>{reminder.name} is finished</h4>
-            )
-          )}
+          {remindersList.map((reminder) => (
+            <TimersListItem key={reminder.timeLeft} reminder={reminder} />
+          ))}
         </ul>
       ) : (
         <LoadingClock />
       )}
-    </>
+    </div>
   );
 };
 

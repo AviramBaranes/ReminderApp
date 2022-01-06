@@ -2,6 +2,9 @@
 
 .Form {
   text-align: center;
+  p {
+    color: red;
+  }
   fieldset {
     border: none;
     display: flex;
@@ -81,7 +84,7 @@
 @media (min-width: $big-desktop-viewport) {
   .Form {
     width: 70%;
-    margin: auto;
+    margin: 5rem auto;
     fieldset {
       input {
         width: 100%;

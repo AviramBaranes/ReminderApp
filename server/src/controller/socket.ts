@@ -24,6 +24,7 @@ export const EVENTS = {
 function socket(io: Server) {
   io.on(EVENTS.connection, async (socket: Socket) => {
     console.log('Socket connected');
+    socket.emit(EVENTS.SERVER.ERROR, { message: 'this is a test' });
     socket.on(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, async ({ userId }) => {
       if (!userId) {
         io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
