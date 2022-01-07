@@ -29,7 +29,6 @@ const getTimers = async (userId, io, socket) => {
         });
     }
     catch (err) {
-        console.log(err);
         io.to(socket.id).emit(EVENTS_1.EVENTS.SERVER.ERROR, {
             message: 'Something went wrong',
         });

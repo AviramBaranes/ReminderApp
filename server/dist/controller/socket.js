@@ -45,7 +45,6 @@ function socket(io) {
                 latest_NEW_TIMER_Call = Date.now();
             }
             catch (err) {
-                console.log(err);
                 io.to(socket.id).emit(EVENTS_1.EVENTS.SERVER.ERROR, {
                     message: 'something went wrong :(',
                 });

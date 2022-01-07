@@ -16,7 +16,6 @@ export type TimeOutsPointersList = {
 function socket(io: Server) {
   io.on(EVENTS.connection, async (socket: Socket) => {
     console.log('Socket connected');
-
     const timeOutPointersList: TimeOutsPointersList = [];
 
     socket.on('disconnect', () => {
@@ -30,12 +29,10 @@ function socket(io: Server) {
         });
         return;
       }
-
       await watchTimers(userId, io, socket, timeOutPointersList);
     });
 
     let latest_NEW_TIMER_Call: number; //for rate limits
-
     socket.on(
       EVENTS.CLIENT.NEW_TIMER,
       async ({ userId, name, time, timeStarted, description }) => {
@@ -71,7 +68,6 @@ function socket(io: Server) {
           await watchTimers(user._id, io, socket, timeOutPointersList);
           latest_NEW_TIMER_Call = Date.now();
         } catch (err) {
-          console.log(err);
           io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
             message: 'something went wrong :(',
           });

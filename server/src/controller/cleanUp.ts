@@ -30,7 +30,6 @@ export const cleanUp: RequestHandler = async (req, res, next) => {
 
     res.status(200).send('Updated user data successfully');
   } catch (err) {
-    console.log(err);
     res.status(500).send('Something went wrong, try tp refresh');
     return;
   }

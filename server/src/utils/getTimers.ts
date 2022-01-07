@@ -40,7 +40,6 @@ export const getTimers = async (userId: string, io: Server, socket: Socket) => {
       calculatedReminders,
     });
   } catch (err) {
-    console.log(err);
     io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
       message: 'Something went wrong',
     });

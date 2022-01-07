@@ -43,7 +43,6 @@ const watchTimers = async (userId, io, socket, timeOutPointersList) => {
         });
     }
     catch (err) {
-        console.log(err);
         io.to(socket.id).emit(EVENTS_1.EVENTS.SERVER.ERROR, {
             message: "Couldn't find reminder",
         });

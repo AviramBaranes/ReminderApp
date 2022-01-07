@@ -51,8 +51,6 @@ export const watchTimers = async (
       }
     });
   } catch (err) {
-    console.log(err);
-
     io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
       message: "Couldn't find reminder",
     });
