@@ -51,7 +51,9 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
   return (
     <div style={{ display: shouldDisplay ? 'block' : 'none' }}>
       {done ? (
-        <h4>{name} is finished</h4>
+        <div className={classes.TimerCard}>
+          <h4>{name} is finished</h4>
+        </div>
       ) : (
         <div className={classes.TimerCard}>
           <p className={classes.Title}>{name} is about to be finished</p>

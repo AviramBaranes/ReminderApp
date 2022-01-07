@@ -7,7 +7,6 @@ exports.cleanUp = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const cleanUp = async (req, res, next) => {
     try {
-        console.log(req.body);
         const { userId } = req.body;
         const UserReminders = (await User_1.default.findById(userId).populate('reminders.reminderId'));
         if (!UserReminders) {

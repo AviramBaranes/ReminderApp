@@ -2,10 +2,20 @@ import { ObjectId } from 'mongoose';
 import { Server, Socket } from 'socket.io';
 import Reminders, { Reminder } from '../models/Reminders';
 import Users, { User } from '../models/User';
+import { clearGlobalTimeouts } from '../utils/clearTimeouts';
 
 import { createUser } from '../utils/createUser';
 import { getTimeLeft } from '../utils/timeLeftCalculator';
-import { checkReminder, watchTimers } from '../utils/watchTimers';
+import { watchTimers } from '../utils/watchTimers';
+
+export type TimeOutsPointersList = {
+  firstTimeoutPointer: NodeJS.Timeout;
+  secondTimeOutPointer: NodeJS.Timeout | null;
+}[];
+
+declare global {
+  var state: TimeOutsPointersList;
+}
 
 export const EVENTS = {
   connection: 'connection',
@@ -33,6 +43,12 @@ function socket(io: Server) {
   io.on(EVENTS.connection, async (socket: Socket) => {
     console.log('Socket connected');
 
+    const timeOutPointersList: TimeOutsPointersList = [];
+
+    socket.on('disconnect', () => {
+      clearGlobalTimeouts(timeOutPointersList);
+    });
+
     socket.on(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, async ({ userId }) => {
       if (!userId) {
         io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
@@ -41,7 +57,7 @@ function socket(io: Server) {
         return;
       }
 
-      await watchTimers(userId, io, socket);
+      await watchTimers(userId, io, socket, timeOutPointersList);
     });
 
     socket.on(
@@ -106,7 +122,11 @@ function socket(io: Server) {
           await user.save();
 
           io.to(socket.id).emit(EVENTS.SERVER.TIMER_CREATED);
-          await watchTimers(userId, io, socket);
+
+          //if not clearing the timeout some reminders will be sent more than once
+          clearGlobalTimeouts(timeOutPointersList);
+
+          await watchTimers(userId, io, socket, timeOutPointersList);
         } catch (err) {
           console.log(err);
           io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
@@ -121,7 +141,6 @@ function socket(io: Server) {
         const { reminders } = await Users.findById(userId).populate(
           'reminders.reminderId'
         );
-        console.log({ reminders });
 
         const calculatedReminders: CalculatedReminder[] = [];
 

@@ -13,6 +13,14 @@
     font-weight: bolder;
   }
 
+  .InValid {
+    background-color: salmon;
+    border: 2px red solid;
+    + label {
+      color: red;
+    }
+  }
+
   input,
   textarea {
     max-width: 100%;

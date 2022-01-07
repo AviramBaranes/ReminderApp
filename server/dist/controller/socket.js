@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EVENTS = void 0;
 const Reminders_1 = __importDefault(require("../models/Reminders"));
 const User_1 = __importDefault(require("../models/User"));
+const clearTimeouts_1 = require("../utils/clearTimeouts");
 const createUser_1 = require("../utils/createUser");
 const timeLeftCalculator_1 = require("../utils/timeLeftCalculator");
 const watchTimers_1 = require("../utils/watchTimers");
@@ -27,6 +28,10 @@ exports.EVENTS = {
 function socket(io) {
     io.on(exports.EVENTS.connection, async (socket) => {
         console.log('Socket connected');
+        const timeOutPointersList = [];
+        socket.on('disconnect', () => {
+            (0, clearTimeouts_1.clearGlobalTimeouts)(timeOutPointersList);
+        });
         socket.on(exports.EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, async ({ userId }) => {
             if (!userId) {
                 io.to(socket.id).emit(exports.EVENTS.SERVER.ERROR, {
@@ -34,7 +39,7 @@ function socket(io) {
                 });
                 return;
             }
-            await (0, watchTimers_1.watchTimers)(userId, io, socket);
+            await (0, watchTimers_1.watchTimers)(userId, io, socket, timeOutPointersList);
         });
         socket.on(exports.EVENTS.CLIENT.NEW_TIMER, async ({ userId, name, time, timeStarted, description }) => {
             try {
@@ -85,7 +90,9 @@ function socket(io) {
                 user.reminders.push({ reminderId: savedReminder._id });
                 await user.save();
                 io.to(socket.id).emit(exports.EVENTS.SERVER.TIMER_CREATED);
-                await (0, watchTimers_1.watchTimers)(userId, io, socket);
+                //if not clearing the timeout some reminders will be sent more than once
+                (0, clearTimeouts_1.clearGlobalTimeouts)(timeOutPointersList);
+                await (0, watchTimers_1.watchTimers)(userId, io, socket, timeOutPointersList);
             }
             catch (err) {
                 console.log(err);
@@ -97,7 +104,6 @@ function socket(io) {
         socket.on(exports.EVENTS.CLIENT.GET_TIMERS, async ({ userId }) => {
             try {
                 const { reminders } = await User_1.default.findById(userId).populate('reminders.reminderId');
-                console.log({ reminders });
                 const calculatedReminders = [];
                 reminders.forEach(({ reminderId: reminder }) => {
                     if (reminder) {

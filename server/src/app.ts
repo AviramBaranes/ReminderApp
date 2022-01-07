@@ -8,7 +8,7 @@ import { createServer } from 'http';
 import cors from 'cors';
 
 import socket from './controller/socket';
-import { cleanUp } from './controller/cleanup';
+import { cleanUp } from './controller/cleanUp';
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 

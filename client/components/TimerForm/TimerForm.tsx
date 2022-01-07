@@ -21,6 +21,10 @@ const TimerForm: React.FC<{
 
   const [error, setError] = useState('');
   const [name, setName] = useState('');
+  const [nameValidity, setNameValidity] = useState({
+    touched: false,
+    valid: false,
+  });
   const [description, setDescription] = useState('');
   const [time, setTime] = useState<Time>({
     hours: '',
@@ -47,6 +51,19 @@ const TimerForm: React.FC<{
     } else {
       setTime((prev) => ({ ...prev, [name]: newValue }));
     }
+  }
+
+  function nameInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    setNameValidity((prev) => ({ ...prev, touched: true }));
+    const { value } = e.target;
+
+    if (value.length < 2 || value.length > 15) {
+      setNameValidity((prev) => ({ ...prev, valid: false }));
+    } else {
+      setNameValidity((prev) => ({ ...prev, valid: true }));
+    }
+
+    setName(value);
   }
 
   function formSubmitHandler(e: React.FormEvent) {
@@ -98,11 +115,14 @@ const TimerForm: React.FC<{
       <p>{error}</p>
       <div className='input-container'>
         <input
+          className={
+            nameValidity.touched && !nameValidity.valid ? 'InValid' : ''
+          }
           type='text'
           name='name'
           id='name'
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={nameInputChangeHandler}
         />
         <label className={name.length ? 'Active' : ''} htmlFor='name'>
           title

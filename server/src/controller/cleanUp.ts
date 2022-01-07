@@ -6,8 +6,6 @@ import Users, { User } from '../models/User';
 
 export const cleanUp: RequestHandler = async (req, res, next) => {
   try {
-    console.log(req.body);
-
     const { userId } = req.body;
 
     const UserReminders = (await Users.findById(userId).populate(
