@@ -10,5 +10,5 @@ export const clearGlobalTimeouts = (
     }
   );
 
-  timeOutPointersList = [];
+  timeOutPointersList.length = 0;
 };

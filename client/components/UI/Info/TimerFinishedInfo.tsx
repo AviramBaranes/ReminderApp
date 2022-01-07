@@ -2,8 +2,6 @@ import React, { SetStateAction, useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 
 import classes from '../../../styles/UI/TimerFinishedInfoModal.module.scss';
-import InfoModal from '../Modals/InfoModal';
-import TimerFinishedInfoModal from '../Modals/TimerFinishedInfoModal';
 
 interface TimerFinishedInfoProps {
   setNumberOfFinishedTimers: React.Dispatch<SetStateAction<number>>;
@@ -30,7 +28,7 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
   setTimeout(() => {
     setFinishedTimer(true);
     setShouldDisplay(false);
-  }, (timeLeft || 0) + 700);
+  }, (timeLeft || 0) + 1500);
 
   const renderTime = ({ remainingTime }: { remainingTime: number }) => {
     if (remainingTime === 0) {

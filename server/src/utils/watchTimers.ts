@@ -1,9 +1,10 @@
 import { ObjectId } from 'mongoose';
 import { Server, Socket } from 'socket.io';
 
-import { EVENTS, TimeOutsPointersList } from '../controller/socket';
+import { TimeOutsPointersList } from '../controller/socket';
 import Reminders, { Reminder } from '../models/Reminders';
 import Users, { User } from '../models/User';
+import { EVENTS } from './EVENTS';
 import { getTimeLeft } from './timeLeftCalculator';
 
 const HEADS_UP = 3_000;
@@ -21,10 +22,7 @@ export const watchTimers = async (
 
     reminders.forEach(({ reminderId: reminder }) => {
       if (reminder) {
-        console.log(reminder);
-
         const timeOut = getTimeLeft(reminder);
-        console.log(2);
 
         if (timeOut < 0) {
           io.to(socket.id).emit(EVENTS.SERVER.TIMER_DONE, {
@@ -63,8 +61,6 @@ export const watchTimers = async (
 
 async function deleteReminder(reminderId: ObjectId) {
   try {
-    console.table({ reminderId });
-
     await Reminders.findByIdAndDelete(reminderId);
   } catch (err) {
     console.log(err);

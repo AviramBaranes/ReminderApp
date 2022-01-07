@@ -1,12 +1,10 @@
-1) refactor
+1) type safe
 
-2) type safe
+2) animations
 
-3) animations
+3) move to logger
 
-4) move to logger
-
-5) deployment
+4) deployment
 
 
 BUGS:

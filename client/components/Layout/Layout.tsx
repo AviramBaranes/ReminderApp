@@ -65,7 +65,7 @@ const Layout: React.FC = ({ children }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+    }).catch();
 
     socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
     socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {

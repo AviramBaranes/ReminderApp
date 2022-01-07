@@ -1,11 +1,11 @@
-import { ObjectId } from 'mongoose';
 import { Server, Socket } from 'socket.io';
-import Reminders, { Reminder } from '../models/Reminders';
-import Users, { User } from '../models/User';
 import { clearGlobalTimeouts } from '../utils/clearTimeouts';
+import { createReminder } from '../utils/createReminder';
+import { EVENTS } from '../utils/EVENTS';
 
-import { createUser } from '../utils/createUser';
-import { getTimeLeft } from '../utils/timeLeftCalculator';
+import { getTimers } from '../utils/getTimers';
+import { getUser } from '../utils/getUser';
+import { isTimeValid } from '../utils/validateTimer';
 import { watchTimers } from '../utils/watchTimers';
 
 export type TimeOutsPointersList = {
@@ -13,32 +13,6 @@ export type TimeOutsPointersList = {
   secondTimeOutPointer: NodeJS.Timeout | null;
 }[];
 
-declare global {
-  var state: TimeOutsPointersList;
-}
-
-export const EVENTS = {
-  connection: 'connection',
-  CLIENT: {
-    NEW_TIMER: 'NEW_TIMER',
-    GET_TIMERS: 'GET_TIMERS',
-    CHECK_FOR_FINISHED_TIMERS: 'CHECK_FOR_FINISHED_TIMERS',
-  },
-  SERVER: {
-    USER_CREATED: 'USER_CREATED',
-    TIMER_CREATED: 'TIMER_CREATED',
-    ALL_TIMERS: 'ALL_TIMERS',
-    TIMER_DONE: 'TIMER_DONE',
-    ERROR: 'ERROR',
-  },
-};
-
-interface CalculatedReminder {
-  name: string;
-  timeLeft: number;
-  totalTime: number;
-  description?: string;
-}
 function socket(io: Server) {
   io.on(EVENTS.connection, async (socket: Socket) => {
     console.log('Socket connected');
@@ -60,73 +34,42 @@ function socket(io: Server) {
       await watchTimers(userId, io, socket, timeOutPointersList);
     });
 
+    let latest_NEW_TIMER_Call: number; //for rate limits
+
     socket.on(
       EVENTS.CLIENT.NEW_TIMER,
       async ({ userId, name, time, timeStarted, description }) => {
         try {
-          let user: any;
-          if (!userId) {
-            user = await createUser();
-            io.to(socket.id).emit(EVENTS.SERVER.USER_CREATED, {
-              userId: user._id,
-            });
-          } else {
-            user = (await Users.findById(userId)) as User<ObjectId>;
-
-            if (!user) {
-              io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-                message: 'Something went wrong :(, please try to refresh',
-              });
-              return;
-            }
-          }
-
-          if (name.length < 2) {
+          if (
+            latest_NEW_TIMER_Call &&
+            Date.now() - latest_NEW_TIMER_Call < 2000
+          ) {
             io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-              message: "Reminder's name is too short",
+              message:
+                'You need to wait at least 2 seconds between each timer creation',
             });
             return;
           }
-          if (name.length > 15) {
-            io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-              message: "Reminder's name is too long",
-            });
-            return;
-          }
-          if (time > 86_400) {
-            io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-              message: 'Timer is too long',
-            });
-            return;
-          }
+          const user = await getUser(userId, io, socket);
+          if (!user) return;
 
-          const reminder: {
-            userId: string;
-            name: string;
-            time: number;
-            timeStarted: number;
-            description?: string;
-          } = {
-            userId,
+          if (!isTimeValid(name, time, io, socket)) return;
+
+          await createReminder(
+            user._id,
             name,
             time,
             timeStarted,
-          };
-
-          if (description) reminder.description = description;
-
-          const newReminder = (await new Reminders(reminder)) as Reminder;
-          const savedReminder = await newReminder.save();
-
-          user.reminders.push({ reminderId: savedReminder._id });
-          await user.save();
+            description,
+            user
+          );
 
           io.to(socket.id).emit(EVENTS.SERVER.TIMER_CREATED);
 
-          //if not clearing the timeout some reminders will be sent more than once
-          clearGlobalTimeouts(timeOutPointersList);
+          clearGlobalTimeouts(timeOutPointersList); //if not clearing the timeout some reminders will be sent more than once
 
-          await watchTimers(userId, io, socket, timeOutPointersList);
+          await watchTimers(user._id, io, socket, timeOutPointersList);
+          latest_NEW_TIMER_Call = Date.now();
         } catch (err) {
           console.log(err);
           io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
@@ -136,43 +79,9 @@ function socket(io: Server) {
       }
     );
 
-    socket.on(EVENTS.CLIENT.GET_TIMERS, async ({ userId }) => {
-      try {
-        const { reminders } = await Users.findById(userId).populate(
-          'reminders.reminderId'
-        );
-
-        const calculatedReminders: CalculatedReminder[] = [];
-
-        reminders.forEach(
-          ({ reminderId: reminder }: { reminderId: Reminder }) => {
-            if (reminder) {
-              const timeLeft = getTimeLeft(reminder);
-
-              const calculatedReminder = {
-                name: reminder.name,
-                timeLeft,
-                totalTime: reminder.time,
-              } as CalculatedReminder;
-
-              if (reminder.description)
-                calculatedReminder.description = reminder.description;
-
-              calculatedReminders.push(calculatedReminder);
-            }
-          }
-        );
-
-        io.to(socket.id).emit(EVENTS.SERVER.ALL_TIMERS, {
-          calculatedReminders,
-        });
-      } catch (err) {
-        console.log(err);
-        io.to(socket.id).emit(EVENTS.SERVER.ERROR, {
-          message: 'Something went wrong',
-        });
-      }
-    });
+    socket.on(EVENTS.CLIENT.GET_TIMERS, async ({ userId }) =>
+      getTimers(userId, io, socket)
+    );
   });
 }
 

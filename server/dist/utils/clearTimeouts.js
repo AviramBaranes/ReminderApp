@@ -6,6 +6,6 @@ const clearGlobalTimeouts = (timeOutPointersList) => {
         clearTimeout(firstTimeoutPointer);
         secondTimeOutPointer && clearTimeout(secondTimeOutPointer);
     });
-    timeOutPointersList = [];
+    timeOutPointersList.length = 0;
 };
 exports.clearGlobalTimeouts = clearGlobalTimeouts;
