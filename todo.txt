@@ -1,14 +1,12 @@
-1) delete finished task on front end
+1) refactor
 
-2) refactor
+2) type safe
 
-3) type safe
+3) animations
 
-4) animations
+4) move to logger
 
-5) move to logger
-
-6) deployment
+5) deployment
 
 
 BUGS:

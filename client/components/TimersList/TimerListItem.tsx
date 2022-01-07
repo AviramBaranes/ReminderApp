@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 
 import classes from '../../styles/pages/TimersList.module.scss';
@@ -7,6 +7,12 @@ import { CalculatedReminder } from './TimersList';
 const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
   reminder,
 }) => {
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setIsFinished(true), reminder.timeLeft + 1000);
+  }, []);
+
   const renderTime = ({ remainingTime }: { remainingTime: number }) => {
     if (remainingTime === 0) {
       return <h4>Finished!</h4>;
@@ -30,7 +36,10 @@ const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
   };
 
   return (
-    <li className={classes.ListItem}>
+    <li
+      style={{ display: isFinished ? 'none' : 'default' }}
+      className={classes.ListItem}
+    >
       <div className={classes.Content}>
         <h5>{reminder.name}</h5>
         {reminder.description && <p>{reminder.description}</p>}
