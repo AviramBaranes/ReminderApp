@@ -3,32 +3,29 @@ import mongoose, { Document, ObjectId } from 'mongoose';
 const Schema = mongoose.Schema;
 
 const RemindersSchema = new Schema({
-  reminders: [
-    {
-      name: { type: String, required: true },
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Users',
+  },
 
-      description: { type: String, required: false },
+  name: { type: String, required: true },
 
-      dateStarted: { type: Date, required: true },
+  description: { type: String, required: false },
 
-      time: { type: Number, required: true },
-    },
-  ],
+  timeStarted: { type: Number, required: true },
+
+  time: { type: Number, required: true },
 });
 
 const Reminders = mongoose.model('Reminders', RemindersSchema);
 
 export default Reminders;
 
-export interface Reminder {
-  _id?: ObjectId;
+export interface Reminder extends Document {
+  userId?: ObjectId;
   name: string;
   description?: string;
-  dateStarted: Date;
+  timeStarted: number;
   time: number;
-}
-
-export interface RemindersType extends Document {
-  _id: ObjectId;
-  reminders: Reminder[];
 }

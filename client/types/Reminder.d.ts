@@ -2,7 +2,7 @@ export interface Reminder {
   userId?: string;
   name: string;
   description?: string;
-  date: Date;
+  timeStarted: number;
   time: number;
 }
 

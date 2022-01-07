@@ -9,7 +9,7 @@ const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
 }) => {
   const renderTime = ({ remainingTime }: { remainingTime: number }) => {
     if (remainingTime === 0) {
-      return <h4>Finished</h4>;
+      return <h4>Finished!</h4>;
     }
     //format time
     const hours = String(Math.floor(remainingTime / 3600)).padStart(2, '0');
@@ -37,10 +37,11 @@ const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
       </div>
       <div className={classes.TimerCircle}>
         <CountdownCircleTimer
+          initialRemainingTime={reminder.timeLeft! / 1000 || 0}
           isPlaying
           size={50}
           strokeWidth={2}
-          duration={reminder.timeLeft! / 1000 || 0}
+          duration={reminder.totalTime}
           colors='#0fc4b2'
         >
           {renderTime}

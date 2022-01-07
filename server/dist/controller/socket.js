@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EVENTS = void 0;
 const Reminders_1 = __importDefault(require("../models/Reminders"));
+const User_1 = __importDefault(require("../models/User"));
 const createUser_1 = require("../utils/createUser");
 const timeLeftCalculator_1 = require("../utils/timeLeftCalculator");
 const watchTimers_1 = require("../utils/watchTimers");
@@ -35,20 +36,20 @@ function socket(io) {
             }
             await (0, watchTimers_1.watchTimers)(userId, io, socket);
         });
-        socket.on(exports.EVENTS.CLIENT.NEW_TIMER, async ({ userId, name, time, date, description }) => {
+        socket.on(exports.EVENTS.CLIENT.NEW_TIMER, async ({ userId, name, time, timeStarted, description }) => {
             try {
-                let userReminders;
+                let user;
                 if (!userId) {
-                    userReminders = await (0, createUser_1.createUser)();
+                    user = await (0, createUser_1.createUser)();
                     io.to(socket.id).emit(exports.EVENTS.SERVER.USER_CREATED, {
-                        userId: userReminders._id,
+                        userId: user._id,
                     });
                 }
                 else {
-                    userReminders = (await Reminders_1.default.findById(userId));
-                    if (!userReminders) {
+                    user = (await User_1.default.findById(userId));
+                    if (!user) {
                         io.to(socket.id).emit(exports.EVENTS.SERVER.ERROR, {
-                            message: "Couldn't find any reminders",
+                            message: 'Something went wrong :(, please try to refresh',
                         });
                         return;
                     }
@@ -71,19 +72,20 @@ function socket(io) {
                     });
                     return;
                 }
-                const dateStarted = new Date(date);
-                const newReminder = {
+                const reminder = {
+                    userId,
                     name,
                     time,
-                    dateStarted,
+                    timeStarted,
                 };
                 if (description)
-                    newReminder.description = description;
-                userReminders.reminders.push(newReminder);
-                await userReminders.save();
-                const reminderToCheck = userReminders.reminders.find((reminder) => reminder.dateStarted.getTime() === dateStarted.getTime());
+                    reminder.description = description;
+                const newReminder = (await new Reminders_1.default(reminder));
+                const savedReminder = await newReminder.save();
+                user.reminders.push({ reminderId: savedReminder._id });
+                await user.save();
                 io.to(socket.id).emit(exports.EVENTS.SERVER.TIMER_CREATED);
-                (0, watchTimers_1.checkReminder)(reminderToCheck, io, socket, userReminders);
+                await (0, watchTimers_1.watchTimers)(userId, io, socket);
             }
             catch (err) {
                 console.log(err);
@@ -94,16 +96,21 @@ function socket(io) {
         });
         socket.on(exports.EVENTS.CLIENT.GET_TIMERS, async ({ userId }) => {
             try {
-                const { reminders } = (await Reminders_1.default.findById(userId));
-                const calculatedReminders = reminders.map((reminder) => {
-                    const timeLeft = (0, timeLeftCalculator_1.getTimeLeft)(reminder);
-                    const calculatedReminder = {
-                        name: reminder.name,
-                        timeLeft,
-                    };
-                    if (reminder.description)
-                        calculatedReminder.description = reminder.description;
-                    return calculatedReminder;
+                const { reminders } = await User_1.default.findById(userId).populate('reminders.reminderId');
+                console.log({ reminders });
+                const calculatedReminders = [];
+                reminders.forEach(({ reminderId: reminder }) => {
+                    if (reminder) {
+                        const timeLeft = (0, timeLeftCalculator_1.getTimeLeft)(reminder);
+                        const calculatedReminder = {
+                            name: reminder.name,
+                            timeLeft,
+                            totalTime: reminder.time,
+                        };
+                        if (reminder.description)
+                            calculatedReminder.description = reminder.description;
+                        calculatedReminders.push(calculatedReminder);
+                    }
                 });
                 io.to(socket.id).emit(exports.EVENTS.SERVER.ALL_TIMERS, {
                     calculatedReminders,

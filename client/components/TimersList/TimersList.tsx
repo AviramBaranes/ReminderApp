@@ -10,6 +10,7 @@ import TimersListItem from './TimerListItem';
 export interface CalculatedReminder {
   name: string;
   timeLeft: number;
+  totalTime: number;
   description?: string;
 }
 

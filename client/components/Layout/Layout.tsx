@@ -60,8 +60,6 @@ const Layout: React.FC = ({ children }) => {
 
     socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
     socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {
-      console.log({ name, timeLeft, done });
-
       setFinishedTimersList((prevState) => [
         ...prevState,
         { name, timeLeft, done },

@@ -47,3 +47,9 @@
     transform: rotate(180deg);
   }
 }
+
+@media (min-width: $tablet-viewport) {
+  .Clock {
+    top: 50%;
+  }
+}

@@ -74,7 +74,7 @@ const TimerForm: React.FC<{
 
     const payload: Reminder = {
       name,
-      date: new Date(),
+      timeStarted: new Date().getTime(),
       time: timeInSeconds,
     };
 

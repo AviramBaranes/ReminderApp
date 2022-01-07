@@ -4,12 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUser = void 0;
-const Reminders_1 = __importDefault(require("../models/Reminders"));
+const User_1 = __importDefault(require("../models/User"));
 const createUser = async () => {
-    const userReminder = new Reminders_1.default({
+    const userReminder = new User_1.default({
         reminders: [],
     });
-    await userReminder.save();
-    return userReminder;
+    const newUser = await userReminder.save();
+    return newUser;
 };
 exports.createUser = createUser;

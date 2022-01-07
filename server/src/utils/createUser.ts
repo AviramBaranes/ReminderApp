@@ -1,9 +1,9 @@
-import Reminders, { RemindersType } from '../models/Reminders';
+import Users, { User } from '../models/User';
 
 export const createUser = async () => {
-  const userReminder = new Reminders({
+  const userReminder = new Users({
     reminders: [],
-  }) as RemindersType;
-  await userReminder.save();
-  return userReminder;
+  }) as User;
+  const newUser = await userReminder.save();
+  return newUser;
 };

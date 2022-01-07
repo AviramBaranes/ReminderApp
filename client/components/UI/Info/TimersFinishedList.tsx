@@ -29,7 +29,6 @@ const TimersFinishedList: React.FC<TimersFinishedListProps> = ({
       setShowModals(false);
     }
   }, [numberOfFinishedTimers]);
-  console.log(finishedTimersList);
 
   return (
     <TimerFinishedInfoModal shouldDisplay={showModals}>
