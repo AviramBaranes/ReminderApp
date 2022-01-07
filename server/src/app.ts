@@ -5,11 +5,21 @@ import express from 'express';
 import connectDb from './utils/database';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
+import cors from 'cors';
 
 import socket from './controller/socket';
+import { cleanUp } from './controller/cleanup';
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+
 const app = express();
+
+app.use(express.json());
+
+app.use(cors({ origin: clientOrigin, credentials: true }));
+
+app.put('/cleanup', cleanUp);
+
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {

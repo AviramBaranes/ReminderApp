@@ -19,6 +19,6 @@ const Users = mongoose.model('Users', UserSchema);
 
 export default Users;
 
-export interface User extends Document {
-  reminders: { reminderId: ObjectId | Reminder }[];
+export interface User<T extends ObjectId | Reminder> extends Document {
+  reminders: { reminderId: T }[];
 }

@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongoose';
 import { Server, Socket } from 'socket.io';
 import Reminders, { Reminder } from '../models/Reminders';
 import Users, { User } from '../models/User';
@@ -54,7 +55,7 @@ function socket(io: Server) {
               userId: user._id,
             });
           } else {
-            user = (await Users.findById(userId)) as User;
+            user = (await Users.findById(userId)) as User<ObjectId>;
 
             if (!user) {
               io.to(socket.id).emit(EVENTS.SERVER.ERROR, {

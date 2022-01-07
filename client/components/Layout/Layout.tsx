@@ -58,6 +58,15 @@ const Layout: React.FC = ({ children }) => {
   useEffect(() => {
     if (!socket || !userId) return;
 
+    //not depending on the resolve/reject value
+    fetch(`${process.env.baseURL}/cleanup`, {
+      method: 'PUT',
+      body: JSON.stringify({ userId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
     socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
     socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {
       setFinishedTimersList((prevState) => [
