@@ -8,7 +8,10 @@ import { createServer } from 'http';
 import cors from 'cors';
 
 import socket from './controller/socket';
-import { cleanUp } from './controller/cleanUp';
+import Users, { User } from './models/User';
+import { ObjectId } from 'mongoose';
+import { Reminder } from './models/Reminders';
+// import { cleanUp } from './controller/cleanUp';
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 
@@ -18,7 +21,36 @@ app.use(express.json());
 
 app.use(cors({ origin: clientOrigin, credentials: true }));
 
-app.put('/cleanup', cleanUp);
+app.put('/cleanup', async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+
+    const UserReminders = (await Users.findById(userId).populate(
+      'reminders.reminderId'
+    )) as User<ObjectId | Reminder>;
+
+    if (!UserReminders) {
+      res.status(403).send('User not found');
+      return;
+    }
+
+    const { reminders } = UserReminders as User<Reminder>;
+
+    const updatedReminder: { reminderId: ObjectId }[] = [];
+
+    reminders.forEach(({ reminderId: reminder }: { reminderId: Reminder }) => {
+      if (reminder) updatedReminder.push({ reminderId: reminder._id });
+    });
+
+    (UserReminders as User<ObjectId>).reminders = updatedReminder;
+    await UserReminders.save();
+
+    res.status(200).send('Updated user data successfully');
+  } catch (err) {
+    res.status(500).send('Something went wrong, try tp refresh');
+    return;
+  }
+});
 
 const httpServer = createServer(app);
 
