@@ -33,7 +33,7 @@ const Layout: React.FC = ({ children }) => {
 
   //get socket connection
   useEffect(() => {
-    fetch(`${process.env.baseURL}/`)
+    fetch(`${process.env.baseURL}`)
       .then((res) => {
         console.log('this is working');
         console.log(res);
