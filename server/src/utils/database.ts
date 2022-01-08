@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 async function connectDb() {
-  const uri =
-    (process.env.MONGO_URI as string) ||
-    'mongodb+srv://Hlife11:hlifeJJ003nz@hlife.pzl2m.mongodb.net/reminderApp?retryWrites=true&w=majority';
+  const uri = process.env.MONGO_URI as string;
   try {
     await mongoose.connect(uri);
     console.log('MongoDB connected');

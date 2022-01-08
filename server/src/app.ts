@@ -11,7 +11,6 @@ import socket from './controller/socket';
 import Users, { User } from './models/User';
 import { ObjectId } from 'mongoose';
 import { Reminder } from './models/Reminders';
-// import { cleanUp } from './controller/cleanUp';
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 

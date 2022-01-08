@@ -21,7 +21,6 @@ const http_1 = require("http");
 const cors_1 = __importDefault(require("cors"));
 const socket_1 = __importDefault(require("./controller/socket"));
 const User_1 = __importDefault(require("./models/User"));
-// import { cleanUp } from './controller/cleanUp';
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
