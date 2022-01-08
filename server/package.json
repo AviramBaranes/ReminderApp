@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "app.js",
   "license": "MIT",
+  "engines": {
+    "node": "14.15.2"
+  },
   "scripts": {
-    "start": "node ./dist/app.js",
+    "start": "node dist/app.js",
     "dev": "nodemon ./dist/app.js"
   },
   "devDependencies": {

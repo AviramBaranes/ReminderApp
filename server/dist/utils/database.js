@@ -5,8 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 async function connectDb() {
-    const uri = process.env.MONGO_URI ||
-        'mongodb+srv://Hlife11:hlifeJJ003nz@hlife.pzl2m.mongodb.net/reminderApp?retryWrites=true&w=majority';
+    const uri = process.env.MONGO_URI;
     try {
         await mongoose_1.default.connect(uri);
         console.log('MongoDB connected');
