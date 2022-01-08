@@ -17,6 +17,9 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({ origin: clientOrigin, credentials: true }));
 // app.put('/cleanup', cleanUp);
+app.get('/', (req, res) => {
+    res.send('Server is on');
+});
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {

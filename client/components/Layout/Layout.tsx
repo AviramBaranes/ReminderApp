@@ -33,6 +33,15 @@ const Layout: React.FC = ({ children }) => {
 
   //get socket connection
   useEffect(() => {
+    fetch(`${process.env.baseURL}/`)
+      .then((res) => {
+        console.log('this is working');
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log('this is not working');
+        console.log(err);
+      });
     if (!socket) {
       const socket = openSocket(process.env.baseURL as string, {
         withCredentials: true,

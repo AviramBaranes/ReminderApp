@@ -20,6 +20,10 @@ app.use(cors({ origin: clientOrigin, credentials: true }));
 
 // app.put('/cleanup', cleanUp);
 
+app.get('/', (req, res) => {
+  res.send('Server is on');
+});
+
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
