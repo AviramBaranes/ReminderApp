@@ -43,13 +43,14 @@ const Layout: React.FC = ({ children }) => {
         console.log(err);
       });
     if (!socket) {
-      const socket = openSocket(process.env.baseURL as string, {
-        withCredentials: true,
-        extraHeaders: {
-          'Access-Control-Allow-Origin': process.env.baseURL as string,
-        },
-      });
-      dispatch(socketActions.newSocket({ socket }));
+      // const socket = openSocket(process.env.baseURL as string, {
+      //   withCredentials: true,
+      //   extraHeaders: {
+      //     'Access-Control-Allow-Origin': process.env.baseURL as string,
+      //   },
+      // });
+      return;
+      // dispatch(socketActions.newSocket({ socket }));
     }
   }, []);
 
