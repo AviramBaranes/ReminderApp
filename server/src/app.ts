@@ -8,7 +8,7 @@ import { createServer } from 'http';
 import cors from 'cors';
 
 import socket from './controller/socket';
-// import { cleanUp } from './controller/cleanUp';
+import { cleanUp } from './controller/cleanUp';
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 
@@ -18,11 +18,7 @@ app.use(express.json());
 
 app.use(cors({ origin: clientOrigin, credentials: true }));
 
-// app.put('/cleanup', cleanUp);
-
-app.get('/', (req, res) => {
-  res.send('Server is on');
-});
+app.put('/cleanup', cleanUp);
 
 const httpServer = createServer(app);
 

@@ -81,12 +81,9 @@ const Layout: React.FC = ({ children }) => {
         'Content-Type': 'application/json',
       },
     })
-      .then(() => {
-        console.log('this is working');
-      })
+      .then()
       .catch((err) => {
-        console.log('this is not working');
-        console.log(err);
+        console.log('[cleanup route]', err);
       });
 
     socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });

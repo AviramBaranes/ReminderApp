@@ -11,15 +11,12 @@ const socket_io_1 = require("socket.io");
 const http_1 = require("http");
 const cors_1 = __importDefault(require("cors"));
 const socket_1 = __importDefault(require("./controller/socket"));
-// import { cleanUp } from './controller/cleanUp';
+const cleanUp_1 = require("./controller/cleanUp");
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({ origin: clientOrigin, credentials: true }));
-// app.put('/cleanup', cleanUp);
-app.get('/', (req, res) => {
-    res.send('Server is on');
-});
+app.put('/cleanup', cleanUp_1.cleanUp);
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer, {
     cors: {
