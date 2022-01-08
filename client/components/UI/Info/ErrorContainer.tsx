@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 import classes from '../../../styles/UI/ErrorContainer.module.scss';
 import { EVENTS } from '../../../EVENTS/events';
@@ -24,7 +25,12 @@ const ErrorContainer: React.FC = () => {
 
   return hasError ? (
     <InfoModal modalClassName={classes.Container}>
-      <p>{errorMessage}</p>
+      <motion.div
+        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: -200 }}
+      >
+        <p>{errorMessage}</p>
+      </motion.div>
     </InfoModal>
   ) : null;
 };

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import { motion } from 'framer-motion';
 
 import classes from '../../styles/pages/TimersList.module.scss';
 import { CalculatedReminder } from './TimersList';
 
-const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
-  reminder,
-}) => {
+const TimersListItem: React.FC<{
+  reminder: CalculatedReminder;
+  index: number;
+}> = ({ reminder, index }) => {
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,10 @@ const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
   };
 
   return (
-    <li
+    <motion.li
+      initial={{ x: '50%', opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
       style={{ display: isFinished ? 'none' : 'default' }}
       className={classes.ListItem}
     >
@@ -56,7 +61,7 @@ const TimersListItem: React.FC<{ reminder: CalculatedReminder }> = ({
           {renderTime}
         </CountdownCircleTimer>
       </div>
-    </li>
+    </motion.li>
   );
 };
 

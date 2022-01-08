@@ -1,18 +1,40 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 
 import classes from '../../styles/Layout/Navigation.module.scss';
 import ClockLogoSvg from '../UI/Logo/ClockLogoSvg';
+import LogoText from './LogoText';
 
 const Navigation: React.FC = () => {
   const { pathname } = useRouter();
 
+  const navVariant = {
+    hidden: {
+      y: -100,
+      opacity: 0,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 110,
+      },
+    },
+  };
+
   return (
     <header>
-      <nav className={classes.Nav}>
+      <motion.nav
+        variants={navVariant}
+        animate='visible'
+        initial='hidden'
+        className={classes.Nav}
+      >
         <div className={classes.Logo}>
           <ClockLogoSvg />
-          <h6>Timers made easy</h6>
+          <LogoText />
         </div>
         <ul>
           <li
@@ -30,7 +52,7 @@ const Navigation: React.FC = () => {
             <Link href='/list-timers'>All Reminders</Link>
           </li>
         </ul>
-      </nav>
+      </motion.nav>
     </header>
   );
 };

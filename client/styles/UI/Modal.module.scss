@@ -11,7 +11,21 @@
   border: 1px solid black;
   box-shadow: -2rem 2rem 10rem black;
   z-index: 30;
+  animation: slide-down 0.051s ease-in-out;
 }
+
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (min-width: $big-phone-viewport) {
   .Modal {
     width: 60%;

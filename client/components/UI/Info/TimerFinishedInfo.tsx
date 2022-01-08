@@ -1,5 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import { motion } from 'framer-motion';
 
 import classes from '../../../styles/UI/TimerFinishedInfoModal.module.scss';
 
@@ -9,6 +10,19 @@ interface TimerFinishedInfoProps {
   name: string;
   timeLeft?: number;
 }
+
+const TimerCardVariant = {
+  hidden: {
+    x: '100%',
+  },
+  visible: {
+    x: 0,
+    transition: {
+      duration: 0.65,
+      type: 'spring',
+    },
+  },
+};
 
 const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
   name,
@@ -47,7 +61,13 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
   };
 
   return (
-    <div style={{ display: shouldDisplay ? 'block' : 'none' }}>
+    <motion.div
+      variants={TimerCardVariant}
+      animate='visible'
+      initial='hidden'
+      exit='exit'
+      style={{ display: shouldDisplay ? 'block' : 'none' }}
+    >
       {done ? (
         <div className={classes.TimerCard}>
           <h4>{name} is finished</h4>
@@ -68,7 +88,7 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

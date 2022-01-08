@@ -21,7 +21,7 @@ const TimersList: React.FC = () => {
 
   const [remindersList, setRemindersList] = useState<
     CalculatedReminder[] | null
-  >(null);
+  >([]);
 
   useEffect(() => {
     if (userId && socket) {
@@ -37,16 +37,19 @@ const TimersList: React.FC = () => {
 
   return (
     <div>
-      {(!userId || !remindersList?.length) && <NoTimers />}
-      {remindersList && userId ? (
+      {!userId || (remindersList && !remindersList.length && <NoTimers />)}
+      {!!remindersList?.length && userId && (
         <ul>
-          {remindersList.map((reminder) => (
-            <TimersListItem key={reminder.timeLeft} reminder={reminder} />
+          {remindersList.map((reminder, i) => (
+            <TimersListItem
+              key={reminder.timeLeft}
+              reminder={reminder}
+              index={i}
+            />
           ))}
         </ul>
-      ) : (
-        <LoadingClock />
       )}
+      {!remindersList && userId && <LoadingClock />}
     </div>
   );
 };
