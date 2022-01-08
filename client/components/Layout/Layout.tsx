@@ -34,7 +34,12 @@ const Layout: React.FC = ({ children }) => {
   //get socket connection
   useEffect(() => {
     if (!socket) {
-      const socket = openSocket(process.env.baseURL as string);
+      const socket = openSocket(process.env.baseURL as string, {
+        withCredentials: true,
+        extraHeaders: {
+          'Access-Control-Allow-Origin': process.env.baseURL as string,
+        },
+      });
       dispatch(socketActions.newSocket({ socket }));
     }
   }, []);
@@ -66,7 +71,14 @@ const Layout: React.FC = ({ children }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-    }).catch((err) => console.log(err));
+    })
+      .then(() => {
+        console.log('this is working');
+      })
+      .catch((err) => {
+        console.log('this is not working');
+        console.log(err);
+      });
 
     socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
     socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {
