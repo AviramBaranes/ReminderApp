@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import openSocket from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
@@ -79,6 +80,10 @@ const Layout: React.FC = ({ children }) => {
 
   return (
     <>
+      <Head>
+        <title>Reminders</title>
+        <link rel='icon' href='app-icon.png' />
+      </Head>
       {showModals && (
         <TimersFinishedList
           finishedTimersList={finishedTimersList}

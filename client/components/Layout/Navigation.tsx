@@ -32,11 +32,11 @@ const Navigation: React.FC = () => {
         initial='hidden'
         className={classes.Nav}
       >
-        <div className={classes.Logo}>
+        <div id='logo' className={classes.Logo}>
           <ClockLogoSvg />
           <LogoText />
         </div>
-        <ul>
+        <ul id='navigation-list'>
           <li
             className={
               pathname === '/timer' ? classes.Active : classes.NotActive

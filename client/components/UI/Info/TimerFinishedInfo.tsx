@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useRef, useState } from 'react';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { motion } from 'framer-motion';
 
@@ -32,6 +32,7 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
 }) => {
   const [finishedTimer, setFinishedTimer] = useState(false);
   const [shouldDisplay, setShouldDisplay] = useState(true);
+  const [shouldAnimateExit, setShouldAnimateExit] = useState(false);
 
   useEffect(() => {
     if (finishedTimer) setNumberOfFinishedTimers((prev) => prev + 1);
@@ -40,9 +41,12 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
   }, [finishedTimer]);
 
   setTimeout(() => {
-    setFinishedTimer(true);
-    setShouldDisplay(false);
-  }, (timeLeft || 0) + 1500);
+    setShouldAnimateExit(true);
+    setTimeout(() => {
+      setFinishedTimer(true);
+      setShouldDisplay(false);
+    }, 400);
+  }, timeLeft || 0 + 1000);
 
   const renderTime = ({ remainingTime }: { remainingTime: number }) => {
     if (remainingTime === 0) {
@@ -62,10 +66,10 @@ const TimerFinishedInfo: React.FC<TimerFinishedInfoProps> = ({
 
   return (
     <motion.div
+      className={shouldAnimateExit ? classes.OutAnimation : ''}
       variants={TimerCardVariant}
       animate='visible'
       initial='hidden'
-      exit='exit'
       style={{ display: shouldDisplay ? 'block' : 'none' }}
     >
       {done ? (

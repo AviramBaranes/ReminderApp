@@ -24,16 +24,18 @@ const watchTimers = async (userId, io, socket, timeOutPointersList) => {
                 }
                 else {
                     let secondTimeOutPointer = null;
+                    const timeLeft = HEADS_UP > timeOut ? timeOut : HEADS_UP; //default is 3 if smaller than the current time left
+                    const timeForFirstTimeOut = HEADS_UP > timeOut ? timeOut : timeOut - HEADS_UP; //same but 3 seconds before
                     const firstTimeoutPointer = setTimeout(() => {
                         io.to(socket.id).emit(EVENTS_1.EVENTS.SERVER.TIMER_DONE, {
-                            timeLeft: HEADS_UP,
+                            timeLeft,
                             name: reminder.name,
                             done: false,
                         });
                         secondTimeOutPointer = setTimeout(async () => {
                             await deleteReminder(reminder._id);
                         }, HEADS_UP);
-                    }, timeOut - HEADS_UP);
+                    }, timeForFirstTimeOut);
                     timeOutPointersList.push({
                         secondTimeOutPointer,
                         firstTimeoutPointer,

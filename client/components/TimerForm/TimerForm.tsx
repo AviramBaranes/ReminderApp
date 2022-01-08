@@ -1,5 +1,6 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 import classes from '../../styles/pages/TimerForm.module.scss';
 import { EVENTS } from '../../EVENTS/events';
@@ -182,7 +183,17 @@ const TimerForm: React.FC<{
           description
         </label>
       </div>
-      <button className={classes.Btn}>Start</button>
+      <motion.button
+        whileHover={{
+          scale: 1.1,
+          backgroundColor: 'rgb(15, 196, 178)',
+          borderColor: 'black',
+          boxShadow: '5px 5px 12px black,-5px 5px 12px black',
+        }}
+        className={classes.Btn}
+      >
+        Start
+      </motion.button>
     </form>
   );
 };

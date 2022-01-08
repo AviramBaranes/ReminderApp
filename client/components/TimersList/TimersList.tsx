@@ -21,7 +21,7 @@ const TimersList: React.FC = () => {
 
   const [remindersList, setRemindersList] = useState<
     CalculatedReminder[] | null
-  >([]);
+  >(null);
 
   useEffect(() => {
     if (userId && socket) {

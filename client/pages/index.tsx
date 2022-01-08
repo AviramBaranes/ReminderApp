@@ -1,10 +1,10 @@
-import { GetStaticProps, NextComponentType } from 'next';
+import { GetServerSideProps } from 'next';
 
 const index: React.FC = () => {
   return null;
 };
 
-export const getStaticProps: GetStaticProps = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return { redirect: { destination: '/timer', permanent: true } };
 };
 

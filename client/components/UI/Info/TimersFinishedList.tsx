@@ -1,4 +1,5 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
+
 import TimerFinishedInfoModal from '../Modals/TimerFinishedInfoModal';
 import TimerFinishedInfo from './TimerFinishedInfo';
 

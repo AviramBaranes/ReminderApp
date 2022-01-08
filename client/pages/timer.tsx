@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 import TimerForm from '../components/TimerForm/TimerForm';
 import ReminderCreatedInfo from '../components/UI/Info/ReminderCreatedInfo';

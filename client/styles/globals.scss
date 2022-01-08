@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&family=The+Nautigal:wght@700&display=swap');
 @import 'variables.scss';
 @import './globalClasses/inputs.scss';
 
@@ -14,6 +15,14 @@ body {
   font-family: 'Quicksand', sans-serif;
   width: 90%;
   margin: auto;
+}
+
+#navigation-list {
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+#logo {
+  font-family: 'The Nautigal', cursive;
 }
 
 a {

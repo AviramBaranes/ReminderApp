@@ -4,4 +4,5 @@ module.exports = {
     baseURL: process.env.SERVER_URL || 'http://localhost:8082',
   },
   reactStrictMode: true,
+  optimizeFonts: false,
 };
