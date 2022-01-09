@@ -42,7 +42,6 @@ function socket(io) {
                     });
                     return;
                 }
-                // const isFirstTimer = userId ? false : true;
                 const user = yield (0, getUser_1.getUser)(userId, io, socket);
                 if (!user)
                     return;
@@ -51,9 +50,7 @@ function socket(io) {
                 yield (0, createReminder_1.createReminder)(user._id, name, time, timeStarted, description, user);
                 io.to(socket.id).emit(EVENTS_1.EVENTS.SERVER.TIMER_CREATED);
                 (0, clearTimeouts_1.clearGlobalTimeouts)(timeOutPointersList); //if not clearing the timeout some reminders will be sent more than once
-                // if (!isFirstTimer) {
                 yield (0, watchTimers_1.watchTimers)(user._id, io, socket, timeOutPointersList);
-                // }
                 latest_NEW_TIMER_Call = Date.now();
             }
             catch (err) {
