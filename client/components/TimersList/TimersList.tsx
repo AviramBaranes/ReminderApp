@@ -34,12 +34,16 @@ const TimersList: React.FC = () => {
     //preventing react state update on an unmounted component
     return () => setRemindersList(null);
   }, [userId, socket]);
-  console.log(remindersList);
+
+  const hasNoReminders =
+    (!userId && !remindersList) || (userId && remindersList?.length === 0);
+  const hasReminders = remindersList && remindersList.length > 0;
+  const isLoading = !remindersList && userId;
 
   return (
     <div>
-      {!userId || (remindersList && !remindersList.length && <NoTimers />)}
-      {!!remindersList?.length && userId && (
+      {hasNoReminders && <NoTimers />}
+      {hasReminders && (
         <ul>
           {remindersList.map((reminder, i) => (
             <TimersListItem
@@ -50,7 +54,7 @@ const TimersList: React.FC = () => {
           ))}
         </ul>
       )}
-      {!remindersList && userId && <LoadingClock />}
+      {isLoading && <LoadingClock />}
     </div>
   );
 };
