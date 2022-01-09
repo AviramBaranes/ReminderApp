@@ -60,7 +60,7 @@ const io = new Server(httpServer, {
   },
 });
 
-const PORT = process.env.PORT || 8082;
+const PORT = process.env.PORT || 8081;
 
 connectDb().then((_) => {
   httpServer.listen(PORT, () => {

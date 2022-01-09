@@ -13,7 +13,7 @@ interface TimerFinishedInfoProps {
 
 const TimerCardVariant = {
   hidden: {
-    x: '100%',
+    x: '-100%',
   },
   visible: {
     x: 0,

@@ -3,7 +3,7 @@
 .Modal {
   position: absolute;
   top: 60vh;
-  right: 0;
+  left: 0;
   width: 60%;
   text-align: center;
 }
@@ -15,9 +15,9 @@
   margin-bottom: 1rem;
   padding: 1rem 0rem;
   border: 1px solid red;
-  border-left: red 5px solid;
-  border-right: none;
-  border-radius: 0.6rem 0 0 0.6rem;
+  border-right: red 5px solid;
+  border-left: none;
+  border-radius: 0 0.6rem 0.6rem 0;
 }
 .Title {
   width: 50%;
@@ -42,7 +42,7 @@
     opacity: 1;
   }
   to {
-    transform: translateX(100%);
+    transform: translateX(-100%);
     opacity: 0;
   }
 }

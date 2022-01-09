@@ -34,12 +34,7 @@ const Layout: React.FC = ({ children }) => {
   //get socket connection
   useEffect(() => {
     if (!socket) {
-      const socket = openSocket(process.env.baseURL as string, {
-        withCredentials: true,
-        extraHeaders: {
-          'Access-Control-Allow-Origin': process.env.baseURL as string,
-        },
-      });
+      const socket = openSocket(process.env.baseURL as string);
       dispatch(socketActions.newSocket({ socket }));
     }
   }, []);

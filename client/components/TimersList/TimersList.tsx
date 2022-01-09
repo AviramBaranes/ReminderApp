@@ -34,6 +34,7 @@ const TimersList: React.FC = () => {
     //preventing react state update on an unmounted component
     return () => setRemindersList(null);
   }, [userId, socket]);
+  console.log(remindersList);
 
   return (
     <div>

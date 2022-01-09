@@ -55,7 +55,7 @@ const io = new socket_io_1.Server(httpServer, {
         credentials: true,
     },
 });
-const PORT = process.env.PORT || 8082;
+const PORT = process.env.PORT || 8081;
 (0, database_1.default)().then((_) => {
     httpServer.listen(PORT, () => {
         console.log(`Reminder App is listening on port ${PORT}`);
