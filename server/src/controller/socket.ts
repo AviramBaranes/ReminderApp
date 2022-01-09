@@ -47,6 +47,7 @@ function socket(io: Server) {
             });
             return;
           }
+          // const isFirstTimer = userId ? false : true;
           const user = await getUser(userId, io, socket);
           if (!user) return;
 
@@ -65,7 +66,9 @@ function socket(io: Server) {
 
           clearGlobalTimeouts(timeOutPointersList); //if not clearing the timeout some reminders will be sent more than once
 
+          // if (!isFirstTimer) {
           await watchTimers(user._id, io, socket, timeOutPointersList);
+          // }
           latest_NEW_TIMER_Call = Date.now();
         } catch (err) {
           io.to(socket.id).emit(EVENTS.SERVER.ERROR, {

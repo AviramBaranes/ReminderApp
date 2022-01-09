@@ -13,6 +13,7 @@ import TimersFinishedList, {
 
 const Layout: React.FC = ({ children }) => {
   const dispatch = useDispatch();
+  const [isNewUser, setIsNewUser] = useState(true);
   const [showModals, setShowModals] = useState(false);
   const [finishedTimersList, setFinishedTimersList] = useState<FinishedTimer[]>(
     []
@@ -45,6 +46,7 @@ const Layout: React.FC = ({ children }) => {
     if (!userId) {
       const userIdFromCookie = getUserIdCookie();
       if (userIdFromCookie) {
+        setIsNewUser(false);
         dispatch(socketActions.newUser({ userId: userIdFromCookie }));
       } else {
         socket.on(EVENTS.SERVER.USER_CREATED, ({ userId }) => {
@@ -71,16 +73,22 @@ const Layout: React.FC = ({ children }) => {
       .catch((err) => {
         console.log('[cleanup route]', err);
       });
+    console.log('hello');
 
     socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
     socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {
-      setFinishedTimersList((prevState) => [
-        ...prevState,
-        { name, timeLeft, done },
-      ]);
-      setShowModals(true);
+      //if new user reminder will be called twice
+      if (isNewUser) {
+        setIsNewUser(false);
+      } else {
+        setFinishedTimersList((prevState) => [
+          ...prevState,
+          { name, timeLeft, done },
+        ]);
+        setShowModals(true);
+      }
     });
-  }, [userId]);
+  }, [userId, isNewUser]);
 
   return (
     <>
