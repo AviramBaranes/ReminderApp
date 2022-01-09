@@ -23,14 +23,14 @@ const Layout: React.FC = ({ children }) => {
     (state: RootState) => state.socketSlice
   );
 
-  function getUserIdCookie() {
-    const cookies = document.cookie.split(';');
-    for (const item of cookies) {
-      if (item.startsWith('userId=')) {
-        return item.substr(7);
-      }
-    }
-  }
+  // function getUserIdCookie() {
+  //   const cookies = document.cookie.split(';');
+  //   for (const item of cookies) {
+  //     if (item.startsWith('userId=')) {
+  //       return item.substr(7);
+  //     }
+  //   }
+  // }
 
   //get socket connection
   useEffect(() => {
@@ -44,13 +44,14 @@ const Layout: React.FC = ({ children }) => {
   useEffect(() => {
     if (!socket) return;
     if (!userId) {
-      const userIdFromCookie = getUserIdCookie();
+      const userIdFromCookie = localStorage.getItem('userId');
       if (userIdFromCookie) {
         setIsNewUser(false);
         dispatch(socketActions.newUser({ userId: userIdFromCookie }));
       } else {
         socket.on(EVENTS.SERVER.USER_CREATED, ({ userId }) => {
-          document.cookie = `userId=${userId};path=/;`;
+          // document.cookie = `userId=${userId};path=/;`;
+          localStorage.setItem('userId', userId);
           dispatch(socketActions.newUser({ userId }));
         });
       }
