@@ -14,8 +14,17 @@ body {
   overflow-x: scroll;
   min-height: 100vh;
   font-family: 'Quicksand', sans-serif;
+  width: 100%;
+}
+
+main,
+header {
   width: 90%;
   margin: auto;
+}
+
+body {
+  display: inline-block;
 }
 
 #navigation-list {
