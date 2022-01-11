@@ -38,7 +38,7 @@ const TimerForm: React.FC<{
   function timeInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const { value, name } = e.target;
     if (isNaN(+value)) return;
-    const maxNumber = name === 'hours' ? 23 : 59;
+    const maxNumber = name === 'hours' ? '23' : '59';
     let newValue = value;
 
     if (value.length > 2) {
@@ -47,7 +47,7 @@ const TimerForm: React.FC<{
 
     if (+value < 9) {
       setTime((prev) => ({ ...prev, [name]: newValue.padStart(2, '0') }));
-    } else if (+value > maxNumber) {
+    } else if (+value > +maxNumber) {
       setTime((prev) => ({ ...prev, [name]: maxNumber }));
     } else {
       setTime((prev) => ({ ...prev, [name]: newValue }));

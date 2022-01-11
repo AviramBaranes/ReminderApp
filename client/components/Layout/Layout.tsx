@@ -23,15 +23,6 @@ const Layout: React.FC = ({ children }) => {
     (state: RootState) => state.socketSlice
   );
 
-  // function getUserIdCookie() {
-  //   const cookies = document.cookie.split(';');
-  //   for (const item of cookies) {
-  //     if (item.startsWith('userId=')) {
-  //       return item.substr(7);
-  //     }
-  //   }
-  // }
-
   //get socket connection
   useEffect(() => {
     if (!socket) {
@@ -50,7 +41,6 @@ const Layout: React.FC = ({ children }) => {
         dispatch(socketActions.newUser({ userId: userIdFromCookie }));
       } else {
         socket.on(EVENTS.SERVER.USER_CREATED, ({ userId }) => {
-          // document.cookie = `userId=${userId};path=/;`;
           localStorage.setItem('userId', userId);
           dispatch(socketActions.newUser({ userId }));
         });
@@ -74,7 +64,6 @@ const Layout: React.FC = ({ children }) => {
       .catch((err) => {
         console.log('[cleanup route]', err);
       });
-    console.log('hello');
 
     socket.emit(EVENTS.CLIENT.CHECK_FOR_FINISHED_TIMERS, { userId });
     socket.on(EVENTS.SERVER.TIMER_DONE, ({ name, timeLeft, done }) => {
